@@ -1,0 +1,28 @@
+import {actionType} from '../constants/action-type.es6';
+import {promisefetch as fetch}  from 'eg-tools';
+
+export function query(params = {}, resolve, reject){
+    return dispatch=>{
+        fetch('/<%= camelName %>/<%= name%>', params).then((data) => {
+            if(data.status ==200){
+                resolve && resolve();
+                dispatch({
+                    type: actionType.QUERY,
+                    data: data
+                });
+            }else{
+                reject && reject();
+                dispatch({
+                    type: actionType.QUERY,
+                    data: null
+                });
+            }
+        }, (data)=>{
+            reject && reject();
+            dispatch({
+                type: actionType.QUERY,
+                data: null
+            });
+        });
+    };
+}

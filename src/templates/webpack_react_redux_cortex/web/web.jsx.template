@@ -1,0 +1,36 @@
+import React, { Component ,PropTypes} from 'react';
+import { connect } from 'react-redux';
+
+import * as <%= upperName %>Action from '../../actions/<%=name %>.es6';
+import {bindingMixin} from 'eg-tools';
+import '../../less/<%=name %>.less';
+
+@connect(state => ({
+    <%= camelName %>: state.<%= camelName %>
+}), <%= upperName %>Action)
+@bindingMixin
+export default class <%= upperName %> extends Component {
+    static defaultProps={
+        name: '<%= upperName %>'
+    };
+    constructor(props) {
+        super(props);
+        this.setBinding('<%= camelName %>');
+    }
+
+    fetchData() {
+        this.props.query();
+    }
+    render() {
+        let data = this.props.<%= camelName %>.get('data').toJS();
+        return (
+            <div className="<%= name %>">
+                <h1 className="title">恭喜你已经成功创建了一个web页面，名称为{this.props.name}</h1>
+                {
+                    data.name && <p>{data.name} : {data.version}</p>
+                }
+                <button className="btn" onClick={::this.fetchData}>点击我获取数据</button>
+            </div>
+        );
+    }
+}
