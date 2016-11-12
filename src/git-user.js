@@ -2,11 +2,9 @@
  * Created by genffy on 2016/10/27.
  */
 var exec = require('child_process').execSync
-
 module.exports = function () {
     var name
     var email
-
     try {
         name = exec('git config --get user.name')
         email = exec('git config --get user.email')

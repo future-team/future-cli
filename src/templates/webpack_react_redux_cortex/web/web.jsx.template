@@ -11,7 +11,8 @@ import '../../less/<%=name %>.less';
 @bindingMixin
 export default class <%= upperName %> extends Component {
     static defaultProps={
-        name: '<%= upperName %>'
+        name: '<%= upperName %>',
+        userName: '<%= gitUser %>'
     };
     constructor(props) {
         super(props);
@@ -25,11 +26,12 @@ export default class <%= upperName %> extends Component {
         let data = this.props.<%= camelName %>.get('data').toJS();
         return (
             <div className="<%= name %>">
-                <h1 className="title">恭喜你已经成功创建了一个web页面，名称为{this.props.name}</h1>
+                <h1 className="title">Hello, {this.props.userName}</h1>
+                <p>恭喜你已经成功创建了一个web页面，名称为{this.props.name}</p>
                 {
                     data.name && <p>{data.name} : {data.version}</p>
                 }
-                <button className="btn" onClick={::this.fetchData}>点击我获取数据</button>
+                <button className="btn" onClick={::this.fetchData}>Click me!</button>
             </div>
         );
     }
