@@ -1,11 +1,9 @@
-import React, { Component ,PropTypes} from 'react';
-import {render} from "react-dom";
-import {BindReact} from 'eg-tools';
+import React from 'react'
+import {render} from "react-dom"
+import {BindReact} from 'eg-tools'
 
-import <%= upperName %> from '../containers/web/<%= upperName %>.jsx';
-import * as reducers from '../reducers/index.es6';
-
-//判断执行dev环境
+import <%= upperName %> from '../containers/web/<%= upperName %>.jsx'
+import * as reducers from '../reducers/index.es6'
 
 render(
     <BindReact Module={<%= upperName %>} reducers={reducers} autoShowFetching={true} barName="web" />,

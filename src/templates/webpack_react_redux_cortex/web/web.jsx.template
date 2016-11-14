@@ -1,29 +1,36 @@
-import React, { Component ,PropTypes} from 'react';
-import { connect } from 'react-redux';
+import React, { Component ,PropTypes} from 'react'
+import { connect } from 'react-redux'
 
-import * as <%= upperName %>Action from '../../actions/<%=name %>.es6';
-import {bindingMixin} from 'eg-tools';
-import '../../less/<%=name %>.less';
+import * as <%= upperName %>Action from '../../actions/<%=name %>.es6'
+import {bindingMixin} from 'eg-tools'
+import '../../less/<%=name %>.less'
 
 @connect(state => ({
     <%= camelName %>: state.<%= camelName %>
 }), <%= upperName %>Action)
 @bindingMixin
 export default class <%= upperName %> extends Component {
+    static propTypes = {
+        query:PropTypes.func,
+        questionList: PropTypes.object,
+        name: PropTypes.string
+    };
     static defaultProps={
         name: '<%= upperName %>',
         userName: '<%= gitUser %>'
     };
     constructor(props) {
-        super(props);
-        this.setBinding('<%= camelName %>');
+        super(props)
+        this.setBinding('<%= camelName %>')
     }
-
+    shouldComponentUpdate () {
+        return true
+    }
     fetchData() {
-        this.props.query();
+        this.props.query()
     }
     render() {
-        let data = this.props.<%= camelName %>.get('data').toJS();
+        let data = this.props.<%= camelName %>.get('data').toJS()
         return (
             <div className="<%= name %>">
                 <h1 className="title">Hello, {this.props.userName}</h1>
@@ -33,6 +40,6 @@ export default class <%= upperName %> extends Component {
                 }
                 <button className="btn" onClick={::this.fetchData}>Click me!</button>
             </div>
-        );
+        )
     }
 }

@@ -40,7 +40,7 @@ router.registerRoute('add', require('../src/add'));
 router.registerRoute('dev', require('../src/commands/dev'));
 router.registerRoute('help', require('../src/commands/help'));
 router.registerRoute('init', require('../src/commands/init'));
-router.registerRoute('remove', require('../src/commands/remove'));
+router.registerRoute('rm', require('../src/remove'));
 router.registerRoute('serve', require('../src/commands/serve'));
 router.registerRoute('default', require('../src/commands/default'));
 process.once('exit', function(){
@@ -50,8 +50,6 @@ process.once('exit', function(){
 if(!cmd){
     router.navigate('help');
 }else{
-
-    // check config file or create it
-    // .gfs.yml
+    // TODO 检查是否在根目录下 以及目录结构是否合法
     router.navigate(cmd, firstCmd);
 }

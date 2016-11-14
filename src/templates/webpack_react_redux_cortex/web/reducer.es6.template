@@ -1,14 +1,14 @@
-import { createReducer } from 'eg-tools';
-import Immutable from 'immutable';
-import {actionType} from '../constants/action-type.es6';
+import { createReducer } from 'eg-tools'
+import Immutable from 'immutable'
+import {actionType} from '../constants/action-type.es6'
 
 const initialState = Immutable.fromJS({
     data:{}
-});
-export const <%= camelName %> = createReducer('<%= camelName %>',initialState, {
+})
+export const <%= camelName %> = createReducer('<%= camelName %>', initialState, {
     [actionType.QUERY]: (data, action) => {
-        if ( action.data && action.data.code == 0) {
+        if ( action.data && action.data.code === 0) {
             return data.setIn(['data'], Immutable.fromJS(action.data.data))
         }
     }
-});
+})
