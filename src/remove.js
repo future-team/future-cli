@@ -3,9 +3,10 @@ var _ = require('lodash')
 var utils = require('./utils')
 var path = require('path')
 var fs = require('fs')
+var chalk = require('chalk')
+var inquirer = require('inquirer')
 var gitUser = require('./git-user')()
 var pathMapConf = require('./config/react')
-var inquirer = require('inquirer')
 
 function removeWeb(conf) {
     _.forEach(pathMapConf.webPathMap, function(value, key){
@@ -18,9 +19,22 @@ function removeWeb(conf) {
         // export  {<>} from "./question-list.es6";
         if(key == 'reducer'){
             var ex = `export  {${conf.camelName}} from "./${conf.name}.es6";`,
-                exPath = path.join(process.cwd() + '/src', value.path, 'index.es6');
-            // TODO how to remove new line reg ?
-            utils.writeFile(exPath, (utils.readFile(exPath)||'').replace(new RegExp(ex, 'g'), ''));
+                exPath = path.join(process.cwd() + '/src', value.path, 'index.es6'),
+                source = utils.readFile(exPath)||'' + '\n',
+                line	= "",
+                content	= "";
+            for(var i=0;i<source.length;i++) {
+                line = line + source[i];
+                if(source[i]=='\n') {
+                    // test line
+                    var regModule = new RegExp(`\./${conf.name}\.es6'`, 'gi');
+                    if(!regModule.test(line)){
+                        content = content + line;
+                    }
+                    line = "";
+                }
+            }
+            utils.writeFile(exPath, content);
         }
         utils.removeFile(filepath)
     });
@@ -35,9 +49,6 @@ function removeComponent(conf) {
 
 function Remove(program){
     var args = program.args,
-        opts = program.args,
-        cwd = process.cwd(),
-        templateType = args[1],
         moduleType = args[2],
         name = args[3],
         upperCaseName  = name.split('-').map((item)=>{return _.upperFirst(item)}).join(''),
@@ -53,7 +64,7 @@ function Remove(program){
     inquirer.prompt([{
         name: 'confirmRemove',
         type: 'confirm',
-        message: 'Do you confirm to remove '+ name + ' '+ moduleType + ' module '
+        message: chalk.red('Do you confirm to remove '+ chalk.yellow(name + ' '+ moduleType) + ' module ')
     }], function (answers) {
         // Use user feedback for... whatever!!
         if(answers.confirmRemove === true){

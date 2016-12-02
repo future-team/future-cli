@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-console.log('hello GFS-cli\n');
 var fs = require('fs');
 var path = require('path');
 var chalk = require('chalk');
@@ -14,7 +13,7 @@ var pkg = require('../package.json');
 var Router = require('../src/router');
 var gens = list(process.argv.slice(2));
 var yaml = require('js-yaml');
-
+console.log(chalk.cyan('\nWelcome to use GFS-cli!\n'));
 var cli = gens.map(function (gen) {
     var minicli = meow({ help: false, pkg: pkg, argv: gen });
     var opts = minicli.flags;
@@ -43,8 +42,9 @@ router.registerRoute('init', require('../src/commands/init'));
 router.registerRoute('rm', require('../src/remove'));
 router.registerRoute('serve', require('../src/commands/serve'));
 router.registerRoute('default', require('../src/commands/default'));
+
 process.once('exit', function(){
-    console.log('process exit...')
+    console.log(chalk.cyan('Action was done! Bye~'))
 });
 
 if(!cmd){
