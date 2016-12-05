@@ -1,12 +1,12 @@
 "use strict";
-var _ = require('lodash')
-var utils = require('./utils')
-var path = require('path')
-var fs = require('fs')
-var chalk = require('chalk')
-var inquirer = require('inquirer')
-var gitUser = require('./git-user')()
-var pathMapConf = require('./config/react')
+let _ = require('lodash')
+let utils = require('./utils')
+let path = require('path')
+let fs = require('fs')
+let chalk = require('chalk')
+let inquirer = require('inquirer')
+let gitUser = require('./git-user')()
+let pathMapConf = require('./config/react')
 
 function removeWeb(conf) {
     _.forEach(pathMapConf.webPathMap, function(value, key){
@@ -14,20 +14,19 @@ function removeWeb(conf) {
         if(key == 'mock'){
             value.path += '/'+conf.camelName;
         }
-        var filepath = path.join( pathMapConf.BASE_PATH, value.path, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
+        let filePath = path.join( pathMapConf.BASE_PATH, value.path, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
         // 在 reduces index.es6 中删除
         // export  {<>} from "./question-list.es6";
         if(key == 'reducer'){
-            var ex = `export  {${conf.camelName}} from "./${conf.name}.es6";`,
-                exPath = path.join(process.cwd() + '/src', value.path, 'index.es6'),
+            let exPath = path.join(process.cwd() + '/src', value.path, 'index.es6'),
                 source = utils.readFile(exPath)||'' + '\n',
                 line	= "",
                 content	= "";
-            for(var i=0;i<source.length;i++) {
+            for(let i=0;i<source.length;i++) {
                 line = line + source[i];
                 if(source[i]=='\n') {
                     // test line
-                    var regModule = new RegExp(`\./${conf.name}\.es6'`, 'gi');
+                    let regModule = new RegExp(`\./${conf.name}\.es6'`, 'gi');
                     if(!regModule.test(line)){
                         content = content + line;
                     }
@@ -36,25 +35,25 @@ function removeWeb(conf) {
             }
             utils.writeFile(exPath, content);
         }
-        utils.removeFile(filepath)
+        utils.removeFile(filePath)
     });
 }
 
 function removeComponent(conf) {
     _.forEach(pathMapConf.componentPathMap, function(value, key){
-        var filepath = path.join( pathMapConf.BASE_PATH, value.path, conf.camelName, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
-        utils.removeFile(filepath)
+        let filePath = path.join( pathMapConf.BASE_PATH, value.path, conf.camelName, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
+        utils.removeFile(filePath)
     });
 }
 
 function Remove(program){
-    var args = program.args,
+    let args = program.args,
         moduleType = args[2],
         name = args[3],
         upperCaseName  = name.split('-').map((item)=>{return _.upperFirst(item)}).join(''),
         camelName = _.camelCase(name);
 
-    var writeConf = {
+    let writeConf = {
         gitUser: gitUser,
         name: name,
         upperName: upperCaseName,

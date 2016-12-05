@@ -1,7 +1,7 @@
 {
   "name": "gfs-cli",
   "version": "1.0.0",
-  "description": "cli for generator-future-static ",
+  "description": "cli for generator-future-static",
   "main": "bin/gfs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,30 +1,24 @@
 'use strict';
-var inquirer = require('inquirer');
-var opn = require('opn');
-
+let inquirer = require('inquirer');
+let opn = require('opn');
 module.exports = function (app) {
     inquirer.prompt([{
         name: 'whereTo',
         type: 'list',
         message: 'Here are a few helpful resources.\n' +
-        '\nI will open the link you select in your browser for you',
+        '\nI will open the link you select in your browser for you\n',
         choices: [{
             name: 'Take me to the documentation',
-            value: 'http://yeoman.io/learning/index.html'
-        }, {
-            name: 'View Frequently Asked Questions',
-            value: 'http://yeoman.io/learning/faq.html'
+            value: 'https://github.com/future-team/future-cli#future-cli'
         }, {
             name: 'File an issue on GitHub',
-            value: 'http://yeoman.io/contributing/opening-issues.html'
+            value: 'https://github.com/future-team/future-cli/issues'
         }, {
-            name: 'Take me back home, Yo!',
-            value: 'home'
+            name: 'Exit!',
+            value: 'exit'
         }]
     }], function (answer) {
-        if (answer.whereTo === 'home') {
-            console.log('I get it, you like learning on your own. I respect that.');
-            app.navigate('home');
+        if (answer.whereTo === 'exit') {
             return;
         }
         opn(answer.whereTo);

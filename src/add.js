@@ -1,12 +1,12 @@
 "use strict";
-var _ = require('lodash')
-var utils = require('./utils')
-var path = require('path')
-var fs = require('fs')
-var inquirer = require('inquirer')
-var chalk = require('chalk')
-var gitUser = require('./git-user')()
-var pathMapConf = require('./config/react')
+let _ = require('lodash')
+let utils = require('./utils')
+let path = require('path')
+let fs = require('fs')
+let inquirer = require('inquirer')
+let chalk = require('chalk')
+let gitUser = require('./git-user')()
+let pathMapConf = require('./config/react')
 const WEB = 'web'
 const COMPONENT = 'component'
 /**
@@ -29,7 +29,7 @@ function checkModuleIsExist(type, conf, callback){
 
     if(type === COMPONENT) {
         _.forEach(_.cloneDeep(pathMapConf.componentPathMap), function(value, key){
-            var filePath = path.join( pathMapConf.BASE_PATH, value.path, conf.camelName, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
+            let filePath = path.join( pathMapConf.BASE_PATH, value.path, conf.camelName, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
             filePathArr.push(filePath)
         });
     }
@@ -67,27 +67,27 @@ function checkModuleIsExist(type, conf, callback){
  */
 function addWeb(conf){
     _.forEach(pathMapConf.webPathMap, function(value, key){
-        var template = utils.getTemplate(key, value, 'web');
-        var complied = _.template(template);
+        let template = utils.getTemplate(key, value, 'web');
+        let complied = _.template(template);
         if(key == 'mock'){
             console.log(value.path);
             value.path += '/'+conf.camelName;
             console.log(value.path);
         }
-        var filepath = path.join( pathMapConf.BASE_PATH, value.path, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
+        let filePath = path.join( pathMapConf.BASE_PATH, value.path, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
         // add register at reduces/index.es6
         // export  {<>} from './question-list.es6'
         // TODO check repeat!
         if(key == 'reducer'){
-            var ex = `\r\nexport {${conf.camelName}} from './${conf.name}.es6'`,
+            let ex = `\r\nexport {${conf.camelName}} from './${conf.name}.es6'`,
                 exPath = path.join(process.cwd() + '/src', value.path, 'index.es6');
             fs.appendFile(exPath, ex, function (err) {
                 if(err){
-                    utils.writeFile(filepath, ex);
+                    utils.writeFile(filePath, ex);
                 }
             });
         }
-        utils.writeFile(filepath, complied(conf))
+        utils.writeFile(filePath, complied(conf))
     });
     // TODO 在 src 下的 index.jsx 中添加相应的注册
 }
@@ -97,10 +97,10 @@ function addWeb(conf){
  */
 function addComponent(conf){
     _.forEach(pathMapConf.componentPathMap, function(value, key){
-        var template = utils.getTemplate(key, value, 'component');
-        var complied = _.template(template);
-        var filepath = path.join( pathMapConf.BASE_PATH, value.path, conf.camelName, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
-        utils.writeFile(filepath, complied(conf))
+        let template = utils.getTemplate(key, value, 'component');
+        let complied = _.template(template);
+        let filePath = path.join( pathMapConf.BASE_PATH, value.path, conf.camelName, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
+        utils.writeFile(filePath, complied(conf))
     });
 }
 /**
@@ -109,13 +109,13 @@ function addComponent(conf){
  * @constructor
  */
 function Add(program){
-    var args = program.args,
+    let args = program.args,
         moduleType = args[2],
         name = args[3],
         upperCaseName  = name.split('-').map((item)=>{return _.upperFirst(item)}).join(''),
         camelName = _.camelCase(name);
 
-    var writeConf = {
+    let writeConf = {
         gitUser: gitUser,
         name: name,
         upperName: upperCaseName,
