@@ -3,20 +3,16 @@
 let fs = require('fs')
 let path = require('path')
 let chalk = require('chalk')
-let updateNotifier = require('update-notifier')
-let Insight = require('insight')
-let stringLength = require('string-length')
-let rootCheck = require('root-check')
+const inquirer = require('inquirer')
 let meow = require('meow')
 let list = require('cli-list')
 let pkg = require('../package.json')
 let Router = require('../src/router')
 let gens = list(process.argv.slice(2))
-let yaml = require('js-yaml')
-const checkEnv = require('../src/check-env')()
+const checkEnv = require('../src/check-env')
 let minicli = null
 let cli = gens.map(function (gen) {
-    minicli = meow(`Usage: gfs COMMANDER [args] [options]
+    minicli = meow(`Usage: gfs COMMAND [options]
   $ gfs add --template react --type web --name question-detail
   $ gfs rm --template react --type component --name question-detail
 Options
@@ -46,7 +42,7 @@ let firstCmd = cli[0] || { opts: {}, args: {} };
 let cmd = firstCmd.args[0];
 let router = new Router();
 
-console.log(chalk.bold.cyan('\nWelcome to use GFS-cli!\n'));
+console.log(chalk.bold.cyan('Welcome to use GFS-cli!'));
 // register route
 router.registerRoute('add', require('../src/add'));
 router.registerRoute('dev', require('../src/commands/dev'));
@@ -58,21 +54,35 @@ router.registerRoute('alias', require('../src/commands/alias'));
 process.once('exit', function(code){
     console.log(chalk.cyan('Action was done! Bye~'))
 });
-
 try {
-    // TODO 检查是否在根目录下 以及目录结构是否合法
     if(!cmd){
         minicli.showHelp()
         return
     }
     // package.json scripts alias
-    let scripts = checkEnv.scripts || {}
+    let scripts = checkEnv.package().scripts || {}
     if(Object.keys(scripts).indexOf(cmd) != -1){
         router.navigate('alias', firstCmd)
         return
     }
     // valid cmd
-    router.navigate(cmd, firstCmd);
+    // first check `--template`
+    if(!firstCmd.template || !firstCmd.t){
+        inquirer.prompt([{
+            name: 'confirmUseDefaultTemplate',
+            type: 'confirm',
+            message: chalk.yellow(`${cmd} command --template option is dismiss, it will be use default config [react]`)
+        }], function (answers) {
+            // Use user feedback for... whatever!!
+            if(answers.confirmUseDefaultTemplate === true){
+                // TODO add, rm, update should check `process.cwd()` is project root and directory structure is valid
+                if(checkEnv.validCmd(firstCmd)) {
+                    router.navigate(cmd, firstCmd)
+                }
+            }
+        });
+    }
 }catch (e) {
+    console.log(chalk.bold.red('command not found!'))
     router.navigate('help', router);
 }

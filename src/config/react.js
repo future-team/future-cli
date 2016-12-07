@@ -1,4 +1,4 @@
-var webPathMap = {
+const webPathMap = {
     'action': {
         'fileNameType': 'normal',
         'path': 'actions',
@@ -35,7 +35,7 @@ var webPathMap = {
         'extension': 'less'
     }
 };
-var componentPathMap = {
+const componentPathMap = {
     'component': {
         'fileNameType': 'upper',
         'path': 'components/web',
@@ -47,6 +47,53 @@ var componentPathMap = {
         'extension': 'less'
     }
 };
-module.exports.BASE_PATH = process.cwd() + '/src'
-module.exports.webPathMap = webPathMap
-module.exports.componentPathMap = componentPathMap
+const directoryTemplate = {
+    "path": "src",
+    "name": "src",
+    "type": "folder",
+    "children": [
+        {
+            "path": "src/actions",
+            "name": "actions",
+            "type": "folder",
+            "children": []
+        },
+        {
+            "path": "src/components",
+            "name": "components",
+            "type": "folder",
+            "children": []
+        },
+        {
+            "path": "src/containers",
+            "name": "containers",
+            "type": "folder",
+            "children": []
+        },
+        {
+            "path": "src/entries",
+            "name": "entries",
+            "type": "folder",
+            "children": []
+        },
+        {
+            "path": "src/html",
+            "name": "html",
+            "type": "folder",
+            "children": []
+        },
+        {
+            "path": "src/reducers",
+            "name": "reducers",
+            "type": "folder",
+            "children": []
+        }
+    ]
+};
+module.exports.reactConf = {
+    BASE_PATH: process.cwd() + '/src',
+    templateName: 'webpack_react_redux_cortex',
+    webPathMap: webPathMap,
+    componentPathMap: componentPathMap,
+    directoryTemplate: directoryTemplate
+}

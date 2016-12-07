@@ -9,20 +9,20 @@ export function query(params = {}, resolve, reject){
                 dispatch({
                     type: actionType.QUERY,
                     data: data
-                });
+                })
             }else{
                 reject && reject()
                 dispatch({
                     type: actionType.QUERY,
                     data: null
-                });
+                })
             }
         }, (data)=>{
             reject && reject(data)
             dispatch({
                 type: actionType.QUERY,
                 data: null
-            });
-        });
-    };
+            })
+        })
+    }
 }

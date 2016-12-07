@@ -14,11 +14,9 @@ module.exports = function (opts) {
         commander.stdout.on('data', (data) => {
             console.log(`${data}`);
         });
-
         commander.stderr.on('data', (data) => {
             console.error(`run command ${chalk.blue('npm run '+ cmd)} error : ${data}`);
         });
-
         commander.on('close', (code) => {
             console.log(`child process exited with code ${code}`);
         });

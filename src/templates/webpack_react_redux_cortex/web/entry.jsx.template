@@ -1,5 +1,5 @@
 import React from 'react'
-import {render} from "react-dom"
+import {render} from 'react-dom'
 import {BindReact} from 'eg-tools'
 
 import <%= upperName %> from '../containers/web/<%= upperName %>.jsx'
@@ -8,4 +8,4 @@ import * as reducers from '../reducers/index.es6'
 render(
     <BindReact Module={<%= upperName %>} reducers={reducers} autoShowFetching={true} barName="web" />,
     document.getElementById('root')
-);
+)
