@@ -70,9 +70,7 @@ function addWeb(conf){
         let template = Utils.getTemplate(conf.templateName, key, value, 'web');
         let complied = _.template(template);
         if(key == 'mock'){
-            console.log(value.path);
             value.path += '/'+conf.camelName;
-            console.log(value.path);
         }
         let filePath = path.join( conf.BASE_PATH, value.path, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
         // add register at reduces/index.es6
@@ -116,7 +114,6 @@ function Add(inputs){
         upperCaseName  = name.split('-').map((item)=>{return _.upperFirst(item)}).join(''),
         camelName = _.camelCase(name);
     const templateConf = configs[`${template}Conf`]
-    console.log(templateConf)
     let writeConf = _.extend({
         gitUser: gitUser,
         name: name,
