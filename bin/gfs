@@ -67,7 +67,7 @@ try {
     }
     // valid cmd
     // first check `--template`
-    if(!firstCmd.template || !firstCmd.t){
+    if(!firstCmd.opts.template){
         inquirer.prompt([{
             name: 'confirmUseDefaultTemplate',
             type: 'confirm',
@@ -81,6 +81,10 @@ try {
                 }
             }
         });
+    }else{
+        if(checkEnv.validCmd(firstCmd)) {
+            router.navigate(cmd, firstCmd)
+        }
     }
 }catch (e) {
     console.log(chalk.bold.red('command not found!'))
