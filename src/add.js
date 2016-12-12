@@ -85,7 +85,12 @@ function addWeb(conf){
                 }
             });
         }
-        Utils.writeFile(filePath, complied(conf))
+        try {
+            Utils.writeFile(filePath, complied(conf))
+            console.log('Add file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
+        }catch(e) {
+            console.error('Add file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
+        }
     });
     // TODO 在 src 下的 index.jsx 中添加相应的注册
 }
@@ -98,7 +103,12 @@ function addComponent(conf){
         let template = Utils.getTemplate(conf.templateName, key, value, 'component');
         let complied = _.template(template);
         let filePath = path.join( conf.BASE_PATH, value.path, conf.camelName, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
-        Utils.writeFile(filePath, complied(conf))
+        try {
+            Utils.writeFile(filePath, complied(conf))
+            console.log('Add file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
+        }catch(e) {
+            console.error('Add file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
+        }
     });
 }
 /**

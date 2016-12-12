@@ -35,14 +35,24 @@ function removeWeb(conf) {
             }
             Utils.writeFile(exPath, content);
         }
-        Utils.removeFile(filePath)
+        try{
+            Utils.removeFile(filePath)
+            console.log('Remove file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
+        }catch(e) {
+            console.log('Remove file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
+        }
     });
 }
 
 function removeComponent(conf) {
     _.forEach(conf.componentPathMap, function(value, key){
         var filePath = path.join( conf.BASE_PATH, value.path, conf.camelName, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
-        Utils.removeFile(filePath)
+        try {
+            Utils.removeFile(filePath)
+            console.log('Remove file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
+        }catch(e){
+            console.log('Remove file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
+        }
     });
 }
 

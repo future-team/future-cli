@@ -47,7 +47,8 @@ module.exports.dirTree = function dirTree(dirPath) {
     return info;
 }
 
-module.exports.logMsg = function(msgs, color, isExit = false) {
+module.exports.logMsg = function(msgs, color, isExit) {
+    var isExit = isExit ? isExit : false
     console.log(chalk[color || 'white'](msgs[0]))
     isExit && process.exit(1)
 }

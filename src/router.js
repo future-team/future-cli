@@ -1,6 +1,3 @@
-/**
- * Created by genffy on 2016/11/4.
- */
 'use strict';
 var path = require('path');
 var titleize = require('titleize');
