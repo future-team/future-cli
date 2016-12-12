@@ -1,4 +1,4 @@
-const webPathMap = {
+var webPathMap = {
     'action': {
         'fileNameType': 'normal',
         'path': 'actions',
@@ -35,7 +35,7 @@ const webPathMap = {
         'extension': 'less'
     }
 };
-const componentPathMap = {
+var componentPathMap = {
     'component': {
         'fileNameType': 'upper',
         'path': 'components/web',
@@ -47,7 +47,7 @@ const componentPathMap = {
         'extension': 'less'
     }
 };
-const directoryTemplate = {
+var directoryTemplate = {
     "path": "src",
     "name": "src",
     "type": "folder",
