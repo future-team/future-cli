@@ -20,7 +20,6 @@ const checkEnv = {
     checkDirectoryValid: function(dirPath, type){
         const template = configs[`${type}Conf`]['directoryTemplate']
         const target = Utils.dirTree(dirPath)
-        // console.log('template ', template, 'target ', target)
         Utils.writeFile(path.join(__dirname, `${type}.json`), JSON.stringify(target))
     },
     validCmd: function(inputs){
