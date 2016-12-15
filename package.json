@@ -3,8 +3,12 @@
   "version": "1.0.1",
   "description": "cli for generator-future-static",
   "main": "bin/gfs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/future-team/future-cli.git"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "bin": {
     "gfs": "./bin/gfs"
@@ -55,5 +59,12 @@
     "name": "genffy",
     "email": "lee.genffy@gmail.com"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^3.0.1",
+    "mocha": "^3.2.0",
+    "mockery": "^2.0.0"
+  }
 }
