@@ -1,6 +1,4 @@
-/**
- * Created by genffy on 2016/11/2.
- */
+'use strict'
 var request = require('request')
 var chalk = require('chalk')
 var inquirer = require('inquirer')

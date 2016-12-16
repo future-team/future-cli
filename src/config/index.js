@@ -1,7 +1,7 @@
-const reactConf = require('./react')
-const angularConf = require('./angular')
-const jqueryConf = require('./jquery')
-const moduleConf = require('./module')
+var reactConf = require('./react')
+var angularConf = require('./angular')
+var jqueryConf = require('./jquery')
+var moduleConf = require('./module')
 module.exports = {
     reactConf: reactConf.reactConf,
     angularConf: angularConf.angularConf,

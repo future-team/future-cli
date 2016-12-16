@@ -1,5 +1,4 @@
 /**
- * Created by genffy on 2016/11/1.
  *
  * 检查repo https://github.com/future-team/generator-future-static
  * 1. 是否在本地

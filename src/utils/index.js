@@ -1,12 +1,13 @@
-const path = require('path')
-const fs = require('fs')
-const fsExtra = require('fs-extra')
-const chalk = require('chalk')
+"use strict";
+var path = require('path')
+var fs = require('fs')
+var fsExtra = require('fs-extra')
+var chalk = require('chalk')
 module.exports.getTemplate = function getTemplate(template, name, opts, type) {
     // TODO 如何定义文件的命名
-    const filePath = path.join(__dirname, `../templates/${template}/${type}/${name}.${opts.extension}.template`);
+    var filePath = path.join(__dirname, '../templates/'+template+'/'+type+'/'+name+'.'+opts.extension+'.template');
     //assert(existsSync(filePath), `getTemplate: file ${name} not fould`);
-    const source = fs.readFileSync(filePath, 'utf-8');
+    var source = fs.readFileSync(filePath, 'utf-8');
     return source;
 }
 
@@ -23,8 +24,8 @@ module.exports.removeFile = function removeFile(filePath) {
 }
 
 module.exports.dirTree = function dirTree(dirPath) {
-    const stats = fs.lstatSync(dirPath)
-    const baseName = path.basename(dirPath)
+    var stats = fs.lstatSync(dirPath)
+    var baseName = path.basename(dirPath)
     if(['node_modules', 'bower_components'].indexOf(baseName) != -1){
         return false
     }
@@ -46,7 +47,8 @@ module.exports.dirTree = function dirTree(dirPath) {
     return info;
 }
 
-module.exports.logMsg = function(msgs, color, isExit = false) {
+module.exports.logMsg = function(msgs, color, isExit) {
+    var isExit = isExit ? isExit : false
     console.log(chalk[color || 'white'](msgs[0]))
     isExit && process.exit(1)
 }

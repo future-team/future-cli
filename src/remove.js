@@ -1,12 +1,12 @@
 "use strict";
-let _ = require('lodash')
-let Utils = require('./utils')
-let path = require('path')
-let fs = require('fs')
-let chalk = require('chalk')
-let inquirer = require('inquirer')
-let gitUser = require('./git-user')()
-let configs = require('./config')
+var _ = require('lodash')
+var Utils = require('./utils')
+var path = require('path')
+var fs = require('fs')
+var chalk = require('chalk')
+var inquirer = require('inquirer')
+var gitUser = require('./git-user')()
+var configs = require('./config')
 
 function removeWeb(conf) {
     _.forEach(conf.webPathMap, function(value, key){
@@ -14,19 +14,19 @@ function removeWeb(conf) {
         if(key == 'mock'){
             value.path += '/'+conf.camelName;
         }
-        let filePath = path.join( conf.BASE_PATH, value.path, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
+        var filePath = path.join( conf.BASE_PATH, value.path, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
         // 在 reduces index.es6 中删除
         // export  {<>} from "./question-list.es6";
         if(key == 'reducer'){
-            let exPath = path.join(process.cwd() + '/src', value.path, 'index.es6'),
+            var exPath = path.join(process.cwd() + '/src', value.path, 'index.es6'),
                 source = Utils.readFile(exPath)||'' + '\n',
                 line	= "",
                 content	= "";
-            for(let i=0;i<source.length;i++) {
+            for(var i=0;i<source.length;i++) {
                 line = line + source[i];
                 if(source[i]=='\n') {
                     // test line
-                    let regModule = new RegExp(`\./${conf.name}\.es6'`, 'gi');
+                    var regModule = new RegExp('\./'+conf.name+'\.es6', 'gi');
                     if(!regModule.test(line)){
                         content = content + line;
                     }
@@ -35,31 +35,41 @@ function removeWeb(conf) {
             }
             Utils.writeFile(exPath, content);
         }
-        Utils.removeFile(filePath)
+        try{
+            Utils.removeFile(filePath)
+            console.log('Remove file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
+        }catch(e) {
+            console.log('Remove file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
+        }
     });
 }
 
 function removeComponent(conf) {
     _.forEach(conf.componentPathMap, function(value, key){
-        let filePath = path.join( conf.BASE_PATH, value.path, conf.camelName, `${value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name']}.${value.extension}`);
-        Utils.removeFile(filePath)
+        var filePath = path.join( conf.BASE_PATH, value.path, conf.camelName, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
+        try {
+            Utils.removeFile(filePath)
+            console.log('Remove file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
+        }catch(e){
+            console.log('Remove file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
+        }
     });
 }
 
 function Remove(inputs){
-    let opts = inputs.opts,
-        template = opts['template'],
-        moduleType = opts['type'],
-        name = opts['name'],
-        upperCaseName  = name.split('-').map((item)=>{return _.upperFirst(item)}).join(''),
-        camelName = _.camelCase(name);
-    const templateConf = configs[`${template}Conf`]
-    let writeConf = _.extend({
+    var opts = inputs.opts
+    var template = opts['template']
+    var moduleType = opts['type']
+    var name = opts['name']
+    var upperCaseName  = name.split('-').map(function(item){return _.upperFirst(item)}).join('')
+    var camelName = _.camelCase(name)
+    var templateConf = configs[template+'Conf']
+    var  writeConf = _.extend({
         gitUser: gitUser,
         name: name,
         upperName: upperCaseName,
         camelName: camelName
-    }, templateConf);
+    }, templateConf)
     // ask confirm
     inquirer.prompt([{
         name: 'confirmRemove',
@@ -70,16 +80,16 @@ function Remove(inputs){
         if(answers.confirmRemove === true){
             switch (moduleType){
                 case 'web':
-                    removeWeb(writeConf);
+                    removeWeb(writeConf)
                     break;
                 case 'component':
-                    removeComponent(writeConf);
+                    removeComponent(writeConf)
                     break;
                 default:
                     // 参数错误
                     break;
             }
         }
-    });
+    })
 }
 module.exports = Remove;

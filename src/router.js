@@ -1,9 +1,5 @@
-/**
- * Created by genffy on 2016/11/4.
- */
 'use strict';
 var path = require('path');
-var _ = require('lodash');
 var titleize = require('titleize');
 var readPkgUp = require('read-pkg-up');
 var updateNotifier = require('update-notifier');
@@ -11,7 +7,7 @@ var Configstore = require('configstore');
 
 /**
  * The router is in charge of handling `yo` different screens.
- * @constructor
+ * @varructor
  * @param  {Environment} env A yeoman environment instance
  * @param  {Insight} insight An insight instance
  * @param  {Configstore} [conf] An optionnal config store instance

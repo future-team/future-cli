@@ -1,6 +1,6 @@
 {
   "name": "future-cli",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "cli for generator-future-static",
   "main": "bin/gfs",
   "repository": {
@@ -55,6 +55,7 @@
     "validate-npm-package-name": "^2.2.2",
     "yeoman-environment": "^1.6.5"
   },
+  "devDependencies": {},
   "author": {
     "name": "genffy",
     "email": "lee.genffy@gmail.com"
