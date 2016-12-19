@@ -1,12 +1,12 @@
 "use strict";
 var _ = require('lodash')
-var Utils = require('./utils')
+var Utils = require('../utils')
 var path = require('path')
 var fs = require('fs')
 var inquirer = require('inquirer')
 var chalk = require('chalk')
-var gitUser = require('./git-user')()
-var configs = require('./config')
+var gitUser = require('../git-user')()
+var configs = require('../config')
 var WEB = 'web'
 var COMPONENT = 'component'
 /**

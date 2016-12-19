@@ -1,5 +1,5 @@
 {
-  "name": "future-cli",
+  "name": "gfs-cli",
   "version": "1.0.5",
   "description": "cli for generator-future-static",
   "main": "bin/gfs",
@@ -8,7 +8,7 @@
     "url": "https://github.com/future-team/future-cli.git"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "node test/runner"
   },
   "bin": {
     "gfs": "./bin/gfs"
@@ -55,7 +55,6 @@
     "validate-npm-package-name": "^2.2.2",
     "yeoman-environment": "^1.6.5"
   },
-  "devDependencies": {},
   "author": {
     "name": "genffy",
     "email": "lee.genffy@gmail.com"

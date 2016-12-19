@@ -1,7 +1,7 @@
 'use strict';
 var inquirer = require('inquirer');
 var opn = require('opn');
-module.exports = function (app) {
+module.exports = function (args) {
     inquirer.prompt([{
         name: 'whereTo',
         type: 'list',

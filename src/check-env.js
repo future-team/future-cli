@@ -40,6 +40,24 @@ var checkEnv = {
             return false
         }
         return true
+    },
+    preValid: function (inputs, callback) {
+        var cmd = inputs.args[0];
+        if(!inputs.opts.template){
+            inquirer.prompt([{
+                name: 'confirmUseDefaultTemplate',
+                type: 'confirm',
+                message: chalk.yellow( cmd+' command --template option is dismiss, it will be use default config [react]')
+            }], function (answers) {
+                // Use user feedback for... whatever!!
+                if(answers.confirmUseDefaultTemplate === true){
+                    inputs.opts.template = 'react'
+                    callback && callback(inputs)
+                }
+            });
+        }else{
+            callback && callback(inputs)
+        }
     }
 }
 module.exports = checkEnv

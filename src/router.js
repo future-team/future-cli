@@ -4,7 +4,6 @@ var titleize = require('titleize');
 var readPkgUp = require('read-pkg-up');
 var updateNotifier = require('update-notifier');
 var Configstore = require('configstore');
-
 /**
  * The router is in charge of handling `yo` different screens.
  * @varructor
@@ -12,7 +11,7 @@ var Configstore = require('configstore');
  * @param  {Insight} insight An insight instance
  * @param  {Configstore} [conf] An optionnal config store instance
  */
-var Router = module.exports = function (env, insight, conf) {
+function Router(env, insight, conf) {
     var pkg = require('../package.json');
     this.routes = {};
     this.conf = conf || new Configstore(pkg.name, {
@@ -29,7 +28,6 @@ Router.prototype.navigate = function (name, arg) {
     if (typeof this.routes[name] === 'function') {
         return this.routes[name].call(this, arg);
     }
-
     throw new Error('no routes called: ' + name);
 };
 
@@ -78,3 +76,5 @@ Router.prototype.updateAvailableGenerators = function () {
     // TODO
     // _.each(this.env.getGeneratorsMeta(), resolveGenerators, this);
 };
+
+module.exports = Router

@@ -53,3 +53,14 @@ module.exports.logMsg = function(msgs, color, isExit) {
     isExit && process.exit(1)
 }
 
+module.exports.formatArgs = function(flags, input) {
+    var opts = flags;
+    var args = input;
+    Object.keys(opts).forEach(function (key) {
+        var legacyKey = key.replace(/[A-Z]/g, function (m) {
+            return '-' + m.toLowerCase();
+        });
+        opts[legacyKey] = opts[key];
+    });
+    return { opts: opts, args: args };
+}
