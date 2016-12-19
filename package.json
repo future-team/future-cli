@@ -1,8 +1,12 @@
 {
-  "name": "future-cli",
-  "version": "1.0.5",
+  "name": "gfs-cli",
+  "version": "1.0.0",
   "description": "cli for generator-future-static",
   "main": "bin/gfs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/future-team/gfs-cli.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
