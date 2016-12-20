@@ -3,6 +3,15 @@ var Utils = require('./utils')
 var checkEnv = require('./check-env')
 var chalk = require('chalk')
 var Router = require('./router')
+var commandMapToPath = {
+    'add': '../src/commands/add',
+    'dev': '../src/commands/dev',
+    'help': '../src/commands/help',
+    'init': '../src/commands/init',
+    'rm': '../src/commands/remove',
+    'serve': '../src/commands/serve',
+    'alias': '../src/commands/alias'
+}
 function Navigate(cli) {
     var router = new Router()
     var cliOpts = Utils.formatArgs(cli.flags, cli.input)
@@ -19,9 +28,16 @@ function Navigate(cli) {
     // navigate
     try {
         if(!cmd){
-            cli.showHelp()
+            // TODO
+            return cli.showHelp()
+        }
+
+        if(!commandMapToPath[cmd]){
+            console.log(chalk.bold.red('command not found!'))
+            // router.navigate('help', router);
             return
         }
+
         // package.json scripts alias
         var scripts = checkEnv.package().scripts || {}
         if(Object.keys(scripts).indexOf(cmd) != -1){

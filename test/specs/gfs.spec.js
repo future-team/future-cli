@@ -5,6 +5,7 @@ const _ = require('lodash')
 const pkg = require('../helpers/package.test.json')
 const navigate = require('../../src/navigate')
 const cli = require('../../src/init-cli')
+const testConsoleStdout = require("test-console").stdout;
 describe('gfs', function () {
     beforeEach(function () {
         // gfs
@@ -13,15 +14,19 @@ describe('gfs', function () {
 
     it('should show help list', function () {
         const gfs = cli(pkg, [])
-        navigate(gfs)
-        // process.stdout.write(log.join('\n'), '\n');
-        // process.stdout.write(this.gfs.showHelp(), '\n');
+        // mock `showHelp` easy to test
+        gfs.showHelp = function(){
+            return -1;
+        }
         expect(navigate(gfs)).to.equal(gfs.showHelp())
     })
 
     it('should give tip `command not found`, then show help list', function(){
         const gfs = cli(pkg, ['notFound'])
-
+        var output = testConsoleStdout.inspectSync(function(){
+            navigate(gfs)
+        })
+        expect(output[0].indexOf('command not found!')).not.equal(-1)
     })
 
     it('should give promt to confirm default `--template` option `react` ', function(){
