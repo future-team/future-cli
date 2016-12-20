@@ -1,6 +1,7 @@
 'use strict'
 var Utils = require('./utils')
 var checkEnv = require('./check-env')
+var chalk = require('chalk')
 var Router = require('./router')
 function Navigate(cli) {
     var router = new Router()

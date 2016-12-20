@@ -1,27 +1,42 @@
-/**
- * Future normal test
- */
-var expect = require('chai').expect
-var sinon = require('sinon')
-var _ = require('lodash')
-var pkg = require('../../package.json')
-var navigate = require('../../src/navigate')
+"use strict";
+const expect = require('chai').expect
+const sinon = require('sinon')
+const _ = require('lodash')
+const pkg = require('../helpers/package.test.json')
+const navigate = require('../../src/navigate')
+const cli = require('../../src/init-cli')
 describe('gfs', function () {
-    var log = [];
-    /*console.log = function() {
-        log.push([].slice.call(arguments));
-    };*/
     beforeEach(function () {
         // gfs
-        this.pkg = pkg
-        this.gens = ['rm', '--type', 'web', '--name', 'question-list' ]
-        this.gfs = require('../../src/init-cli')(pkg, this.gens)
+        this.gens = ['rm', '--template', 'react', '--type', 'web', '--name', 'question-list']
     })
 
-    it( 'should show help list', function () {
-        //navigate(this.gfs)
+    it('should show help list', function () {
+        const gfs = cli(pkg, [])
+        navigate(gfs)
         // process.stdout.write(log.join('\n'), '\n');
         // process.stdout.write(this.gfs.showHelp(), '\n');
-        // expect(log.join('\n')).to.equal(this.gfs.showHelp())
+        expect(navigate(gfs)).to.equal(gfs.showHelp())
     })
+
+    it('should give tip `command not found`, then show help list', function(){
+        const gfs = cli(pkg, ['notFound'])
+
+    })
+
+    it('should give promt to confirm default `--template` option `react` ', function(){
+        const gfs = cli(pkg, ['rm', '--type', 'web', '--name', 'question-list'])
+
+    })
+
+    it('should give tip `command not found`, then show help list', function(){
+        const gfs = cli(pkg, ['rm', '--template', 'react', '--type', 'web', '--name', 'question-list'])
+
+    })
+
+    it('should give tip `command not found`, then show help list', function(){
+        const gfs = cli(pkg, ['notFound'])
+
+    })
+
 });
