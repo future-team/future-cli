@@ -34,8 +34,7 @@ function Navigate(cli) {
 
         if(!commandMapToPath[cmd]){
             console.log(chalk.bold.red('command not found!'))
-            // router.navigate('help', router);
-            return
+            return router.navigate('help', router);
         }
 
         // package.json scripts alias

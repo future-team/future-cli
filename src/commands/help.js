@@ -2,7 +2,7 @@
 var inquirer = require('inquirer');
 var opn = require('opn');
 module.exports = function (args) {
-    inquirer.prompt([{
+    var prompt = inquirer.prompt([{
         name: 'whereTo',
         type: 'list',
         message: 'Here are a few helpful resources.\n' +
@@ -17,10 +17,14 @@ module.exports = function (args) {
             name: 'Exit!',
             value: 'exit'
         }]
-    }], function (answer) {
+    }]);
+    prompt.then(function (answer) {
         if (answer.whereTo === 'exit') {
             return;
         }
-        opn(answer.whereTo);
-    });
+        opn(answer.whereTo).then(() => {
+            console.log('closed')
+        });
+    })
+    return prompt
 };

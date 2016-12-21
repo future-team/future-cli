@@ -28,7 +28,7 @@
     "fullname": "^3.1.0",
     "git-clone": "^0.1.0",
     "globby": "^6.0.0",
-    "inquirer": "^0.12.0",
+    "inquirer": "^2.0.0",
     "insight": "^0.8.3",
     "js-yaml": "^3.6.1",
     "lodash": "^4.16.5",
@@ -37,7 +37,7 @@
     "minimatch": "^3.0.0",
     "ncp": "^2.0.0",
     "opn": "^4.0.2",
-    "ora": "^0.2.3",
+    "ora": "^0.4.0",
     "read-metadata": "^1.0.0",
     "read-pkg-up": "^2.0.0",
     "request": "^2.67.0",
@@ -63,6 +63,7 @@
     "gulp-mocha": "^3.0.1",
     "mocha": "^3.2.0",
     "mockery": "^2.0.0",
+    "sinon": "^1.17.6",
     "test-console": "^1.0.0"
   }
 }
