@@ -11,7 +11,7 @@ var checkEnv = {
         try{
             projectPkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8') || '{}')
         }catch(e){
-            console.error(chalk.red('Can\'t found package.json file in your project folder! Please check it!'))
+            console.error(chalk.bold.red('Can\'t found package.json file in your project folder! Please check it!'))
             process.exit(1)
         }
         return projectPkg
@@ -22,10 +22,15 @@ var checkEnv = {
         var target = Utils.dirTree(dirPath)
         Utils.writeFile(path.join(__dirname, type+'.json'), JSON.stringify(target))
     },
+    /**
+     * @param inputs
+     * @returns {boolean}
+     */
     validCmd: function(inputs){
         var args = inputs.args[0];
         var opts = inputs.opts;
         var msgs = [];
+        var isOk = true;
         if(['add', 'rm'].indexOf(args) != -1){
             // template default is react
             if(['web', 'component'].indexOf(opts.type) == -1){
@@ -36,19 +41,30 @@ var checkEnv = {
             }
         }
         if(msgs.length){
-            Utils.logMsg(msgs, 'red', true)
-            return false
+            console.log(chalk.bold.red(msgs.join('\n')))
+            isOk = false
         }
-        return true
+        return isOk
     },
+    /**
+     *
+     * @param inputs
+     * @param callback
+     */
     preValid: function (inputs, callback) {
-        var cmd = inputs.args[0];
+        var cmd = inputs.args[0],
+            questions = [],
+            prompt = null;
         if(!inputs.opts.template){
-            inquirer.prompt([{
+            questions = [{
                 name: 'confirmUseDefaultTemplate',
                 type: 'confirm',
                 message: chalk.yellow( cmd+' command --template option is dismiss, it will be use default config [react]')
-            }], function (answers) {
+            }];
+        }
+        if(questions.length){
+            prompt = inquirer.prompt(questions);
+            prompt.then(function (answers) {
                 // Use user feedback for... whatever!!
                 if(answers.confirmUseDefaultTemplate === true){
                     inputs.opts.template = 'react'
@@ -58,6 +74,7 @@ var checkEnv = {
         }else{
             callback && callback(inputs)
         }
+        return prompt
     }
 }
 module.exports = checkEnv

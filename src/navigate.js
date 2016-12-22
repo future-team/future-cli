@@ -40,9 +40,12 @@ function Navigate(cli) {
         // package.json scripts alias
         var scripts = checkEnv.package().scripts || {}
         if(Object.keys(scripts).indexOf(cmd) != -1){
-            router.navigate('alias', cliOpts)
-            return
+            return router.navigate('alias', cliOpts)
         }
+
+        // TODO check directory valid for some commands, such as rm add
+
+
         // some options check or set default
         checkEnv.preValid(cliOpts, function(opts){
             if(checkEnv.validCmd(opts)) {

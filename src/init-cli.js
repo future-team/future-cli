@@ -1,5 +1,17 @@
 'use strict'
 var meow = require('meow')
+/**
+ *
+ * TODO
+ * --template -> --type|-t
+ * --type -> --module|-m
+ *
+ * init cli default command
+ * @param pkg cli `package.json` config
+ * @param argv command input
+ * @returns {{input, flags, pkg, help, showHelp}}
+ * @constructor
+ */
 function Cli(pkg, argv) {
     var helpStr = 'Usage: gfs COMMAND [options]\n'+
         '  $ gfs add --template react --type web --name question-detail\n'+
