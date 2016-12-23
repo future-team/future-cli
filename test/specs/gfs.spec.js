@@ -65,20 +65,4 @@ describe('gfs', () => {
             done()
         })
     })
-
-    it('should give promt to confirm default `--template` option `react` ', function(){
-        const gfs = cli(pkg, ['rm', '--type', 'web', '--name', 'question-list'])
-
-    })
-
-    it('should give tip `command not found`, then show help list', function(){
-        const gfs = cli(pkg, ['rm', '--template', 'react', '--type', 'web', '--name', 'question-list'])
-
-    })
-
-    it('should give tip `command not found`, then show help list', function(){
-        const gfs = cli(pkg, ['notFound'])
-
-    })
-
 });

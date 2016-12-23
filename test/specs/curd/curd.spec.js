@@ -80,11 +80,19 @@ describe('gfs curd', () => {
         done()
     })
 
-    it('rm: `containers/web/GfsTest.jsx` should not exit.', (done) => {
+    it('`rm --template react --type web --name gfs-test`: `containers/web/GfsTest.jsx` should in delete list when done this file should not exist.', (done) => {
         done()
     })
 
-    it('add: `containers/web/GfsTest.jsx` should not exit.', (done) => {
+    it('if not add then rm: `containers/web/GfsTest.jsx` file should not exist.', (done) => {
+        done()
+    })
+
+    it('`add --template react --type web --name gfs-test`: `containers/web/GfsTest.jsx` should in add list when done this file should exist.', (done) => {
+        done()
+    })
+
+    it('if repeat add same name module should give a confirm tip is override.', (done) => {
         done()
     })
 })
