@@ -49,7 +49,7 @@ function checkModuleIsExist(type, conf, callback){
  */
 function addWeb(conf){
     var addFiles = []
-    _.forEach(conf.webPathMap, function(value, key){
+    _.forEach(_.cloneDeep(conf.webPathMap), function(value, key){
         let template = Utils.getTemplate(conf.templateName, key, value, 'web');
         let complied = _.template(template);
         if(key == 'mock'){
@@ -61,34 +61,23 @@ function addWeb(conf){
         // TODO check repeat!
         if(key == 'reducer'){
             let ex = '\nexport {'+conf.camelName+'} from \'./'+conf.name+'.es6\'',
-                exPath = path.join(process.cwd() + '/src', value.path, 'index.es6'),
+                exPath = path.join(conf.BASE_PATH, value.path, 'index.es6'),
                 indexContent = '';
-            /*fs.appendFile(exPath, ex, function (err) {
-                if(err){
-                    Utils.writeFile(filePath, ex);
-                }
-            });*/
             try{
                 indexContent = fs.readFileSync(exPath)
             }catch(e){
-                console.log('some thing error')
+                console.log('some thing error', e)
             }
             indexContent += ex;
             addFiles.push({
-                path: filePath,
+                path: exPath,
                 content: indexContent
             })
         }
         addFiles.push({
             path: filePath,
-            content: complied
+            content: complied(conf)
         })
-        /*try {
-            Utils.writeFile(filePath, complied(conf))
-            console.log('Add file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
-        }catch(e) {
-            console.error('Add file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
-        }*/
     });
     // TODO 在 src 下的 index.jsx 中添加相应的注册
     return addFiles
@@ -99,21 +88,15 @@ function addWeb(conf){
  */
 function addComponent(conf){
     var addFiles = []
-    _.forEach(conf.componentPathMap, function(value, key){
+    _.forEach(_.cloneDeep(conf.componentPathMap), function(value, key){
         let template = Utils.getTemplate(conf.templateName, key, value, 'component');
         let complied = _.template(template);
         let filePath = path.join( conf.BASE_PATH, value.path, conf.camelName, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
 
         addFiles.push({
             path: filePath,
-            content: complied
+            content: complied(conf)
         })
-        /*try {
-            Utils.writeFile(filePath, complied(conf))
-            console.log('Add file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
-        }catch(e) {
-            console.error('Add file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
-        }*/
     });
     return addFiles
 }
@@ -138,6 +121,7 @@ function goToAdd(type, conf) {
             console.error('Add file '+ chalk.red(path.relative(conf.BASE_PATH, value.path))+ ' error')
         }
     })
+    return addFiles
 }
 /**
  *
@@ -149,6 +133,7 @@ function Add(inputs){
     var template = opts['template']
     var moduleType = opts['type']
     var name = opts['name']
+    var targetPath = opts['path']
     var upperCaseName  = name.split('-').map(function(item){return _.upperFirst(item)}).join('')
     var camelName = _.camelCase(name)
     var templateConf = configs[template+'Conf']
@@ -158,6 +143,8 @@ function Add(inputs){
         upperName: upperCaseName,
         camelName: camelName
     }, templateConf)
+
+    targetPath && (writeConf.BASE_PATH = targetPath)
 
     var existArr = checkModuleIsExist(moduleType, writeConf)
     var isExist = !!existArr.length
@@ -171,20 +158,16 @@ function Add(inputs){
             message: chalk.red('It seems that some file already exist!\n')+ chalk.blue(existFiles.join('\n')) + chalk.green('\nDo you want to force continue?'),
             default: false
         }]);
-        return prompt.then(function (answer) {
+        prompt.then(function (answer) {
             var addFiles = []
             if(answer && answer.confirmAdd) {
                 addFiles = goToAdd(moduleType, writeConf)
             }
-            return new Promise(function(resolve){
-                resolve(addFiles)
-            })
+            return addFiles
         })
+        return prompt
     }else{
-        var addFiles = goToAdd(moduleType, writeConf)
-        return new Promise(function(resolve){
-            resolve(addFiles)
-        })
+        return goToAdd(moduleType, writeConf)
     }
 }
 module.exports = Add;

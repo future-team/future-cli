@@ -18,7 +18,7 @@ function removeWeb(conf) {
         // 在 reduces index.es6 中删除
         // export  {<>} from "./question-list.es6";
         if(key == 'reducer'){
-            var exPath = path.join(process.cwd() + '/src', value.path, 'index.es6'),
+            var exPath = path.join(conf.BASE_PATH, value.path, 'index.es6'),
                 source = Utils.readFile(exPath)||'' + '\n',
                 line	= "",
                 content	= "";
@@ -61,6 +61,7 @@ function Remove(inputs){
     var template = opts['template']
     var moduleType = opts['type']
     var name = opts['name']
+    var targetPath = opts['path']
     var upperCaseName  = name.split('-').map(function(item){return _.upperFirst(item)}).join('')
     var camelName = _.camelCase(name)
     var templateConf = configs[template+'Conf']
@@ -70,12 +71,16 @@ function Remove(inputs){
         upperName: upperCaseName,
         camelName: camelName
     }, templateConf)
+
+    targetPath && (writeConf.BASE_PATH = targetPath)
+
     // ask confirm
-    inquirer.prompt([{
+    var prompt = inquirer.prompt([{
         name: 'confirmRemove',
         type: 'confirm',
         message: chalk.red('Do you confirm to remove '+ chalk.yellow(name + ' '+ moduleType) + ' module ')
-    }], function (answers) {
+    }])
+    prompt.then(function (answers) {
         // Use user feedback for... whatever!!
         if(answers.confirmRemove === true){
             switch (moduleType){
@@ -91,5 +96,6 @@ function Remove(inputs){
             }
         }
     })
+    return prompt
 }
 module.exports = Remove;
