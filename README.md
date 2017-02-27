@@ -38,3 +38,8 @@ $ gfs dev
 $ gfs demo
 $ gfs start
 ```
+
+## Test
+```bash
+$ npm run test
+```

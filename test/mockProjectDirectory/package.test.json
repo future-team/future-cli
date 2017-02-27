@@ -1,0 +1,25 @@
+{
+  "name": "test-gfs-cli",
+  "version": "1.0.0",
+  "description": "test cli for generator-future-static",
+  "main": "bin/gfs",
+  "repository": {
+    "type": "git",
+    "url": "https://www.path-to-repo.com/namespace/reponame"
+  },
+  "scripts": {
+    "alias-a": "console.error('alias-a')",
+    "alias-b": "console.error('alias-b')",
+    "alias-c": "console.error('alias-c')"
+  },
+  "bin": {
+    "gfs": "./bin/gfs"
+  },
+  "dependencies": {},
+  "author": {
+    "name": "author",
+    "email": "author@gmail.com"
+  },
+  "license": "MIT",
+  "devDependencies": {}
+}

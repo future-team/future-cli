@@ -47,9 +47,46 @@ module.exports.dirTree = function dirTree(dirPath) {
     return info;
 }
 
-module.exports.logMsg = function(msgs, color, isExit) {
+module.exports.logMsg = function logMsg(msgs, color, isExit) {
     var isExit = isExit ? isExit : false
     console.log(chalk[color || 'white'](msgs[0]))
     isExit && process.exit(1)
 }
 
+module.exports.formatArgs = function formatArgs(flags, input) {
+    var opts = flags;
+    var args = input;
+    Object.keys(opts).forEach(function (key) {
+        var legacyKey = key.replace(/[A-Z]/g, function (m) {
+            return '-' + m.toLowerCase();
+        });
+        opts[legacyKey] = opts[key];
+    });
+    return { opts: opts, args: args };
+}
+module.exports.checkType = function checkType(obj, type) {
+    return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() === type;
+},
+module.exports.logging = function(level, content){
+    var levelColorMap = {
+            error: 'warn',
+            warn: 'red',
+            info: 'cyan',
+            debug: 'magenta'
+        },
+        level = level ? level : 'info',
+        msg = "";
+    try {
+        msg = content
+    }catch(e){
+        console.error(chalk.red('the log content is not valid'))
+    }
+    if(level === 'info'){
+        process.stdout.write(msg);
+        process.stdout.write('\n');
+    }else{
+        process.stdout.write(chalk.bold[levelColorMap[level]](msg));
+        process.stdout.write('\n');
+    }
+
+}
