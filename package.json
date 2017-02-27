@@ -49,8 +49,7 @@
     "uid": "0.0.2",
     "untildify": "^3.0.2",
     "update-notifier": "^1.0.2",
-    "validate-npm-package-name": "^2.2.2",
-    "yeoman-environment": "^1.6.5"
+    "validate-npm-package-name": "^2.2.2"
   },
   "author": {
     "name": "genffy",

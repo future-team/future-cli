@@ -1,0 +1,42 @@
+import React, { Component ,PropTypes} from 'react'
+/**
+ * 关于 eagle-ui 的详细使用请查阅文档
+ * @reference http://uedfamily.com/documents/eagle-ui/examples/#/index
+ */
+// import {Grid,Row,Col,Panel,PanelHeader,PanelContent,PanelFooter,ValidatorPanel,Input,FormGroup,Button,Dialog} from 'eagle-ui'
+
+export default class <%= upperName %> extends Component {
+    static propTypes = {
+        userName: PropTypes.string,
+        questionList: PropTypes.object,
+        name: PropTypes.string
+    };
+    static defaultProps={
+        userName: '<%= gitUser %>'
+    };
+    constructor(props) {
+        super(props)
+        this.state = {
+            componentName: ''
+        }
+    }
+    shouldComponentUpdate () {
+        return true
+    }
+    clickHandler(){
+        this.setState({
+            componentName: '<%= name %>'
+        })
+        return false
+    }
+
+    render() {
+        return (
+            <div class='<%= name %>'>
+                <h1 className='title'>Hello, {this.props.userName}</h1>
+                { this.state.componentName && <p>Success create a {this.state.componentName} component!</p>}
+                <button className="btn" onClick={::this.clickHandler}>Click me!</button>
+            </div>
+        )
+    }
+}

@@ -14,8 +14,9 @@ var meow = require('meow')
  */
 function Cli(pkg, argv) {
     var helpStr = 'Usage: gfs COMMAND [options]\n'+
-        '  $ gfs add --template react --type web --name question-detail\n'+
-        '  $ gfs rm --template react --type component --name question-detail\n'+
+        '  $ gfs add --template react-redux --type web --name question-detail\n'+
+        '  $ gfs rm --template react-redux --type component --name question-detail\n'+
+        '  $ gfs rm --template react-dm --type web --name question-list\n'+
         'Options\n'+
         '  --template  project template, default is [react]\n'+
         '  --type      module type [web|component]\n'+

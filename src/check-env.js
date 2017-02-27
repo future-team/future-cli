@@ -1,10 +1,10 @@
-"use strict"
-var fs = require('fs')
-var path = require('path')
-var inquirer = require('inquirer')
-var configs = require('./config')
-var Utils = require('./utils')
-var chalk = require('chalk')
+"use strict";
+var fs = require('fs');
+var path = require('path');
+var inquirer = require('inquirer');
+var configs = require('./config');
+var Utils = require('./utils');
+var chalk = require('chalk');
 var checkEnv = {
     package: function(){
         var projectPkg = {}
@@ -67,7 +67,7 @@ var checkEnv = {
             prompt.then(function (answers) {
                 // Use user feedback for... whatever!!
                 if(answers.confirmUseDefaultTemplate === true){
-                    inputs.opts.template = 'react'
+                    inputs.opts.template = 'react-redux'
                     callback && callback(inputs)
                 }
             });

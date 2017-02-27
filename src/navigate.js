@@ -53,13 +53,13 @@ function Navigate(cli) {
                 try {
                     router.navigate(cmd, opts)
                 }catch (e) {
-                    console.log(chalk.bold.red('command not found!'))
+                    console.log(chalk.bold.red('command not found!'), e)
                     router.navigate('help', router);
                 }
             }
         })
     }catch (e) {
-        console.log(chalk.bold.red('command not found!'))
+        console.log(chalk.bold.red('command not found!'));
         router.navigate('help', router);
     }
 }
