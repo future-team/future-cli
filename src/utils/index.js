@@ -161,13 +161,15 @@ module.exports.generateConf = function generateConf(inputs) {
     var upperCaseName  = name.split('-').map(function(item){return _.upperFirst(item)}).join('')
     var camelName = _.camelCase(name)
     var templateConf = configs[_.camelCase(template)+'Conf']
+    var lowerCaseName = name.split('-').map(function(item){return _.lowerCase(item)}).join('')
     var writeConf = _.extend({
         gitUser: gitUser,
         name: name,
         upperName: upperCaseName,
+        lowerName: lowerCaseName,
         camelName: camelName,
         moduleType: moduleType
-    }, templateConf)
+    }, templateConf);
 
     targetPath && (writeConf.BASE_PATH = targetPath)
     return writeConf;

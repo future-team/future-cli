@@ -16,15 +16,22 @@ module.exports.addWeb = function addWeb(conf){
         if(key == 'component'){
             value.path += '/'+conf.camelName;
         }
-        let filePath = path.join(conf.BASE_PATH, value.path, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
-        console.log(template)
+        let fileName = value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'];
+        if(key == 'controller'){
+            // add `Control` suffix
+            fileName += 'Control';
+        }
+        if(key == 'model') {
+            // add `Model` suffix
+            fileName += 'Model';
+        }
+        let filePath = path.join(conf.BASE_PATH, value.path, fileName + '.' + value.extension);
         // Attention!
         // check `config/base.config.js` the `root` config
         // if this point to a directory, this should a multi page app, then should generate `view/pages/<name>.jsx`, `view/<name>.html`
         // if this point to a file, this should a single page app, then should add route to `view/pages/Index.jsx` file.
 
         // TODO check repeat!
-
         addFiles.push({
             path: filePath,
             content: complied(conf)

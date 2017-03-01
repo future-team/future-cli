@@ -11,6 +11,6 @@
 <body>
 <div id="root"></div>
 <script src="./common.js"></script>
-<script src="./<%= name %>.js"></script>
+<script src="./<%= lowerName %>.js"></script>
 </body>
 </html>

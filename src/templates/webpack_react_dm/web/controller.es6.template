@@ -3,19 +3,12 @@ import <%= upperName %>Model from '../model/<%= upperName %>Model'
 
 @Control(<%= upperName %>Model)
 export default class <%= upperName %>Control{
-    static name='<%= name %>Control';
-
-    static queryBookTypes(){
-
+    static name='<%= camelName %>Control';
+    static query(){
         return (dispatch)=>{
-            fetch('/test').then((data)=>{
-                dispatch(this.testControlUpdate(data.data) )
+            fetch('/<%= name %>').then((data)=>{
+                dispatch(this.<%= camelName %>ControlUpdate(data.data))
             })
         }
-    }
-
-    static getBooks(index,bookList){
-        //根据此类生成的update方法
-        return this.testControlUpdate('books',bookList[index] )
     }
 }

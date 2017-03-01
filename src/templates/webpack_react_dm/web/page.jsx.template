@@ -2,7 +2,7 @@ import React, { Component /*,PropTypes*/} from 'react'
 import {View, page} from 'gfs-react-dm'
 
 import <%= upperName %>Control from '@controller/<%= upperName %>Control'
-import <%= upperName %>Compoent from '@component/<%= name %>/<%= upperName %>'
+import <%= upperName %>Component from '@component/<%= camelName %>/<%= upperName %>'
 import '../styles/<%= name %>.less'
 
 @View(<%= upperName %>Control)
@@ -14,7 +14,7 @@ export default class <%= upperName %> extends Component{
     render(){
         return (
             <div>
-                <<%= upperName %>Compoent {...this.props} />
+                <<%= upperName %>Component {...this.props} />
             </div>
         )
     }
