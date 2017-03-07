@@ -150,18 +150,34 @@ module.exports.logging = function(level, content){
  * @return {Object}
  */
 module.exports.generateConf = function generateConf(inputs) {
-    var opts = inputs.opts
-    var template = opts['template']
-    var type = opts['type']
-    var name = opts['name']
+    var opts = inputs.opts;
+    var template = opts['template'];
+    var type = opts['type'];
+    var name = opts['name'];
     // need to compose with template
     // --template react-dm --type web -> REACT_DM_WEB
-    var moduleType = (template + '-' + type).split('-').map(function(item){return _.lowerCase(item)}).join('_')
-    var targetPath = opts['path']
-    var upperCaseName  = name.split('-').map(function(item){return _.upperFirst(item)}).join('')
-    var camelName = _.camelCase(name)
-    var templateConf = configs[_.camelCase(template)+'Conf']
-    var lowerCaseName = name.split('-').map(function(item){return _.lowerCase(item)}).join('')
+    var moduleType = (template + '-' + type).split('-').map(function(item){return _.lowerCase(item)}).join('_');
+    var targetPath = opts['path'];
+    var upperCaseName  = name.split('-').map(function(item){return _.upperFirst(item)}).join('');
+    var camelName = _.camelCase(name);
+    var templateConf = configs[_.camelCase(template)+'Conf'];
+    var lowerCaseName = name.split('-').map(function(item){return _.lowerCase(item)}).join('');
+    // Attention when `moduleType` type is `REACT_DM_WEB`
+    // check `config/base.config.js` the `root` config
+    // if this point to a directory, this should a multi page app, then should generate `view/pages/<name>.jsx`, `view/<name>.html`
+    // if this point to a file, this should a single page app, then should add route to `view/pages/Index.jsx` file.
+    // when remove file, RT.
+    if(moduleType === 'react_dm_web'){
+        var isMultiApp = true;
+        try{
+            var projectConf = require(path.join(process.cwd(), '/system/config/base.config.js'));
+            isMultiApp = !fs.lstatSync(path.join(process.cwd(), projectConf.root || '')).isDirectory();
+        }catch (e){
+            console.error('get config file error!', e)
+        }
+        templateConf.isMultiApp = isMultiApp;
+    }
+    console.log(isMultiApp);
     var writeConf = _.extend({
         gitUser: gitUser,
         name: name,
@@ -171,6 +187,6 @@ module.exports.generateConf = function generateConf(inputs) {
         moduleType: moduleType
     }, templateConf);
 
-    targetPath && (writeConf.BASE_PATH = targetPath)
+    targetPath && (writeConf.BASE_PATH = targetPath);
     return writeConf;
 }

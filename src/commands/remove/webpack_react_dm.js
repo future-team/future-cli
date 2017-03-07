@@ -6,6 +6,7 @@ var fs = require('fs');
 var chalk = require('chalk');
 
 module.exports.removeWeb = function removeWeb(conf) {
+    var isMultiApp = conf.isMultiApp;
     _.forEach(conf.webPathMap, function(value, key){
         if(key == 'component'){
             value.path += '/'+conf.camelName;
@@ -20,31 +21,7 @@ module.exports.removeWeb = function removeWeb(conf) {
             fileName += 'Model';
         }
         let filePath = path.join(conf.BASE_PATH, value.path, fileName + '.' + value.extension);
-        // Attention!
-        // check `config/base.config.js` the `root` config
-        // if this point to a directory, this should a multi page app, then should generate `view/pages/<name>.jsx`, `view/<name>.html`
-        // if this point to a file, this should a single page app, then should add route to `view/pages/Index.jsx` file.
 
-        // 在 reduces index.es6 中删除
-        // export  {<>} from "./question-list.es6";
-        // if(key == 'reducer'){
-        //     var exPath = path.join(conf.BASE_PATH, value.path, 'index.es6'),
-        //         source = Utils.readFile(exPath)||'' + '\n',
-        //         line	= "",
-        //         content	= "";
-        //     for(var i=0;i<source.length;i++) {
-        //         line = line + source[i];
-        //         if(source[i]=='\n') {
-        //             // test line
-        //             var regModule = new RegExp('\./'+conf.name+'\.es6', 'gi');
-        //             if(!regModule.test(line)){
-        //                 content = content + line;
-        //             }
-        //             line = "";
-        //         }
-        //     }
-        //     Utils.writeFile(exPath, content);
-        // }
         try{
             Utils.removeFile(filePath);
             console.log('Remove file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done');
@@ -52,4 +29,37 @@ module.exports.removeWeb = function removeWeb(conf) {
             console.log('Remove file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error');
         }
     });
+    var indexHtmlPath = path.join(conf.BASE_PATH, 'view/index.html'),
+        indexHtmlCtn = Utils.readFile(indexHtmlPath);
+    // need to rewrite `/view/pages/Index.jsx`
+    // replace view/index.html `./index.js` => `./bundle.js`
+    // 1. remove `import ${conf.upperName}Container from './${conf.upperName}'` to top
+    // 2. remove `<Route path="/${conf.camelName}" component={${conf.upperName}Container} />` to `Router`
+    var exPath = path.join(conf.BASE_PATH, 'view/pages', 'Index.jsx'),
+        source = Utils.readFile(exPath)||'' + '\n',
+        line	= "",
+        content	= "",
+        containerCtn = 'import '+conf.upperName+'Container from \'./'+conf.upperName+'\'',
+        routerCtn = '<Route path="/'+conf.camelName+'" component={'+conf.upperName+'Container} />';
+    for(var i=0; i<source.length; i++) {
+        line = line + source[i];
+        if(source[i]=='\n') {
+            var containerReg = new RegExp(containerCtn, 'gi'),
+                routerReg = new RegExp(routerCtn, 'gi');
+            // remove containerCtn or routerCtn once
+            if(!containerReg.test(line) && !routerReg.test(line)){
+                content = content + line;
+            }
+            line = "";
+        }
+    }
+    // remove anyway `/view/pages/Index.jsx`
+    Utils.writeFile(exPath, content);
+    if(isMultiApp){
+        indexHtmlCtn = indexHtmlCtn.replace('index.js', 'bundle.js');
+    }else{
+        // replace view/index.html `./bundle.js` => `./index.js`
+        indexHtmlCtn = indexHtmlCtn.replace('bundle.js', 'index.js');
+    }
+    Utils.writeFile(indexHtmlPath, indexHtmlCtn);
 }

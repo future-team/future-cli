@@ -45,7 +45,6 @@ function Navigate(cli) {
 
         // TODO check directory valid for some commands, such as rm add
 
-
         // some options check or set default
         checkEnv.preValid(cliOpts, function(opts){
             if(checkEnv.validCmd(opts)) {

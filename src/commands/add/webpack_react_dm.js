@@ -8,7 +8,8 @@ var Utils = require('../../utils');
  * @param conf
  */
 module.exports.addWeb = function addWeb(conf){
-    var addFiles = []
+    var addFiles = [],
+        isMultiApp = conf.isMultiApp;
     _.forEach(_.cloneDeep(conf.webPathMap), function(value, key){
         let template = Utils.getTemplate(conf.templateName, key, value, 'web');
         let complied = _.template(template);
@@ -26,17 +27,64 @@ module.exports.addWeb = function addWeb(conf){
             fileName += 'Model';
         }
         let filePath = path.join(conf.BASE_PATH, value.path, fileName + '.' + value.extension);
-        // Attention!
-        // check `config/base.config.js` the `root` config
-        // if this point to a directory, this should a multi page app, then should generate `view/pages/<name>.jsx`, `view/<name>.html`
-        // if this point to a file, this should a single page app, then should add route to `view/pages/Index.jsx` file.
-
         // TODO check repeat!
-        addFiles.push({
-            path: filePath,
-            content: complied(conf)
-        })
+        if(key == 'html' && isMultiApp){
+            // not write `html` file
+        }else{
+            addFiles.push({
+                path: filePath,
+                content: complied(conf)
+            })
+        }
     });
-    // TODO 在 src 下的 index.jsx 中添加相应的注册
+    var indexHtmlPath = path.join(conf.BASE_PATH, 'view/index.html'),
+        indexHtmlCtn = Utils.readFile(indexHtmlPath);
+    // need to rewrite `/view/pages/Index.jsx`
+    // replace view/index.html `./index.js` => `./bundle.js`
+    if(isMultiApp){
+        // 1. append `import ${conf.upperName}Container from './${conf.upperName}'` to top
+        // 2. append `<Route path="/${conf.camelName}" component={${conf.upperName}Container} />` to `Router`
+        var exPath = path.join(conf.BASE_PATH, 'view/pages', 'Index.jsx'),
+            source = Utils.readFile(exPath)||'' + '\n',
+            line	= "",
+            content	= "",
+            containerCtn = 'import '+conf.upperName+'Container from \'./'+conf.upperName+'\'\n',
+            routerCtn = '<Route path="/'+conf.camelName+'" component={'+conf.upperName+'Container} />\n',
+            importCount = 0;
+        for(var i=0; i<source.length; i++) {
+            line = line + source[i];
+            if(source[i]=='\n') {
+                var containerReg = /import\s.*\sfrom\s.*/gi,
+                    routerReg = /<Router\s.*>/gi;
+                content = content + line;
+                // add containerCtn once
+                if(containerReg.test(line) && importCount == 0){
+                    importCount = 1;
+                    content = content + containerCtn;
+                    console.log(containerCtn);
+                }
+                // add routerCtn once
+                if(routerReg.test(line)){
+                    content = content + routerCtn;
+                    console.log(routerCtn);
+                }
+                line = "";
+            }
+        }
+        // `/view/pages/Index.jsx`
+        addFiles.push({
+            path: exPath,
+            content: content
+        });
+        //
+        indexHtmlCtn = indexHtmlCtn.replace('index.js', 'bundle.js');
+    }else{
+        // replace view/index.html `./bundle.js` => `./index.js`
+        indexHtmlCtn = indexHtmlCtn.replace('bundle.js', 'index.js');
+    }
+    addFiles.push({
+        path: indexHtmlPath,
+        content: indexHtmlCtn
+    });
     return addFiles
 }
