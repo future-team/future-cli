@@ -1,13 +1,13 @@
-'use strict'
-var exec = require('child_process').execSync
+'use strict';
+var exec = require('child_process').execSync;
 module.exports = function () {
-    var name, email
+    var name, email;
     try {
-        name = exec('git config --get user.name')
-        email = exec('git config --get user.email')
+        name = exec('git config --get user.name');
+        email = exec('git config --get user.email');
     } catch (e) {}
 
-    name = name && name.toString().trim()
-    email = email && (' <' + email.toString().trim() + '>')
-    return (name || '') + (email || '')
+    name = name && name.toString().trim();
+    email = email && (' <' + email.toString().trim() + '>');
+    return (name || '') + (email || '');
 }

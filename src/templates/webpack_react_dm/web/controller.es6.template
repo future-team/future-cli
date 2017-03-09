@@ -1,0 +1,14 @@
+import {Control, fetch} from 'gfs-react-dm'
+import <%= upperName %>Model from '../model/<%= upperName %>Model'
+
+@Control(<%= upperName %>Model)
+export default class <%= upperName %>Control{
+    static name='<%= camelName %>Control';
+    static query(){
+        return (dispatch)=>{
+            fetch('/<%= name %>').then((data)=>{
+                dispatch(this.<%= camelName %>ControlUpdate(data.data))
+            })
+        }
+    }
+}

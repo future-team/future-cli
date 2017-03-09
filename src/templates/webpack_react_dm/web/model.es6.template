@@ -1,0 +1,6 @@
+import {Model} from 'gfs-react-dm'
+
+@Model
+export default class <%= upperName %>Model {
+    static list=[];
+}
