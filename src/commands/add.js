@@ -1,23 +1,25 @@
 "use strict";
-var _ = require('lodash')
-var Utils = require('../utils')
-var path = require('path')
-var fs = require('fs')
-var inquirer = require('inquirer')
-var chalk = require('chalk')
-var gitUser = require('../git-user')()
-var configs = require('../config')
-var WEB = 'web'
-var COMPONENT = 'component'
+var _ = require('lodash');
+var Utils = require('../utils');
+var path = require('path');
+var fs = require('fs');
+var inquirer = require('inquirer');
+var chalk = require('chalk');
+var reactRedux = require('./add/webpack_react_redux_cortex');
+var reactDm = require('./add/webpack_react_dm');
+
+var REACT_REDUX_WEB = 'react_redux_web';
+var REACT_REDUX_COMPONENT = 'react_redux_component';
+var REACT_DM_WEB = 'react_dm_web';
 /**
  * list will to add file path, check it is exist then list then
  * @param type
  * @param conf
  * @param callback
  */
-function checkModuleIsExist(type, conf, callback){
-    var filePathArr = []
-    if(type === WEB) {
+function checkModuleIsExist(conf, callback){
+    var filePathArr = [], type = conf.moduleType;
+    if(type === REACT_REDUX_WEB) {
         _.forEach(_.cloneDeep(conf.webPathMap), function(value, key){
             if(key == 'mock'){
                 value.path += '/'+conf.camelName;
@@ -27,130 +29,66 @@ function checkModuleIsExist(type, conf, callback){
         });
     }
 
-    if(type === COMPONENT) {
+    if(type === REACT_REDUX_COMPONENT) {
         _.forEach(_.cloneDeep(conf.componentPathMap), function(value, key){
             var filePath = path.join( conf.BASE_PATH, value.path, conf.camelName, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
             filePathArr.push(filePath)
         });
     }
+    // TODO
+    if(type === REACT_DM_WEB) {
+        _.forEach(_.cloneDeep(conf.webPathMap), function(value, key){
+            var filePath = path.join( conf.BASE_PATH, value.path, conf.camelName, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
+            filePathArr.push(filePath)
+        });
+    }
 
-    var existArr = []
+    var existArr = [];
     _.forEach(filePathArr, function(value, key){
         if(fs.existsSync(value)){
             existArr.push(value)
         }
-    })
+    });
     return existArr;
 }
 
-/**
- *
- * @param conf
- */
-function addWeb(conf){
-    var addFiles = []
-    _.forEach(_.cloneDeep(conf.webPathMap), function(value, key){
-        let template = Utils.getTemplate(conf.templateName, key, value, 'web');
-        let complied = _.template(template);
-        if(key == 'mock'){
-            value.path += '/'+conf.camelName;
-        }
-        let filePath = path.join( conf.BASE_PATH, value.path, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
-        // add register at reduces/index.es6
-        // export  {<>} from './question-list.es6'
-        // TODO check repeat!
-        if(key == 'reducer'){
-            let ex = '\nexport {'+conf.camelName+'} from \'./'+conf.name+'.es6\'',
-                exPath = path.join(conf.BASE_PATH, value.path, 'index.es6'),
-                indexContent = '';
-            try{
-                indexContent = fs.readFileSync(exPath)
-            }catch(e){
-                console.log('some thing error', e)
-            }
-            indexContent += ex;
-            addFiles.push({
-                path: exPath,
-                content: indexContent
-            })
-        }
-        addFiles.push({
-            path: filePath,
-            content: complied(conf)
-        })
-    });
-    // TODO 在 src 下的 index.jsx 中添加相应的注册
-    return addFiles
-}
-/**
- *
- * @param conf
- */
-function addComponent(conf){
-    var addFiles = []
-    _.forEach(_.cloneDeep(conf.componentPathMap), function(value, key){
-        let template = Utils.getTemplate(conf.templateName, key, value, 'component');
-        let complied = _.template(template);
-        let filePath = path.join( conf.BASE_PATH, value.path, conf.camelName, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
-
-        addFiles.push({
-            path: filePath,
-            content: complied(conf)
-        })
-    });
-    return addFiles
-}
-function goToAdd(type, conf) {
-    var addFiles = []
+function goToAdd(conf) {
+    var addFiles = [], type = conf.moduleType;
     switch (type){
-        case WEB:
-            addFiles = addWeb(conf);
+        case REACT_REDUX_WEB:
+            addFiles = reactRedux.addWeb(conf);
             break;
-        case COMPONENT:
-            addFiles = addComponent(conf);
+        case REACT_REDUX_COMPONENT:
+            addFiles = reactRedux.addComponent(conf);
             break;
+        case REACT_DM_WEB:
+            addFiles = reactDm.addWeb(conf);
         default:
             // 参数错误
             break;
     }
     _.forEach(addFiles, function(value, key){
         try {
-            Utils.writeFile(value.path, value.content)
-            console.log('Add file '+ chalk.blue(path.relative(conf.BASE_PATH, value.path))+ ' done')
+            Utils.writeFile(value.path, value.content);
+            console.log('Add file '+ chalk.blue(path.relative(conf.BASE_PATH, value.path))+ ' done');
         }catch(e) {
-            console.error('Add file '+ chalk.red(path.relative(conf.BASE_PATH, value.path))+ ' error')
+            console.error('Add file '+ chalk.red(path.relative(conf.BASE_PATH, value.path))+ ' error');
         }
-    })
-    return addFiles
+    });
+    return addFiles;
 }
 /**
  *
- * @param program
+ * @param inputs
  * @varructor
  */
 function Add(inputs){
-    var opts = inputs.opts
-    var template = opts['template']
-    var moduleType = opts['type']
-    var name = opts['name']
-    var targetPath = opts['path']
-    var upperCaseName  = name.split('-').map(function(item){return _.upperFirst(item)}).join('')
-    var camelName = _.camelCase(name)
-    var templateConf = configs[template+'Conf']
-    var writeConf = _.extend({
-        gitUser: gitUser,
-        name: name,
-        upperName: upperCaseName,
-        camelName: camelName
-    }, templateConf)
-
-    targetPath && (writeConf.BASE_PATH = targetPath)
-
-    var existArr = checkModuleIsExist(moduleType, writeConf)
-    var isExist = !!existArr.length
+    var writeConf = Utils.generateConf(inputs);
+    var existArr = checkModuleIsExist(writeConf);
+    var isExist = !!existArr.length;
     if(isExist){
         var existFiles = existArr.map(function(item, index){
-            return (index+1) + '. '+path.relative(writeConf.BASE_PATH, item)
+            return (index+1) + '. '+path.relative(writeConf.BASE_PATH, item);
         });
         var prompt = inquirer.prompt([{
             name: 'confirmAdd',
@@ -159,15 +97,15 @@ function Add(inputs){
             default: false
         }]);
         prompt.then(function (answer) {
-            var addFiles = []
+            var addFiles = [];
             if(answer && answer.confirmAdd) {
-                addFiles = goToAdd(moduleType, writeConf)
+                addFiles = goToAdd(writeConf);
             }
-            return addFiles
-        })
-        return prompt
+            return addFiles;
+        });
+        return prompt;
     }else{
-        return goToAdd(moduleType, writeConf)
+        return goToAdd(writeConf);
     }
 }
 module.exports = Add;

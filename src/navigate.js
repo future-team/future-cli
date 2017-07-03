@@ -45,7 +45,6 @@ function Navigate(cli) {
 
         // TODO check directory valid for some commands, such as rm add
 
-
         // some options check or set default
         checkEnv.preValid(cliOpts, function(opts){
             if(checkEnv.validCmd(opts)) {
@@ -53,13 +52,13 @@ function Navigate(cli) {
                 try {
                     router.navigate(cmd, opts)
                 }catch (e) {
-                    console.log(chalk.bold.red('command not found!'))
+                    console.log(chalk.bold.red('command not found!'), e)
                     router.navigate('help', router);
                 }
             }
         })
     }catch (e) {
-        console.log(chalk.bold.red('command not found!'))
+        console.log(chalk.bold.red('command not found!'));
         router.navigate('help', router);
     }
 }

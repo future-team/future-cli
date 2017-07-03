@@ -90,7 +90,7 @@ var directoryTemplate = {
         }
     ]
 };
-module.exports.reactConf = {
+module.exports.reactReduxConf = {
     BASE_PATH: process.cwd() + '/src',
     templateName: 'webpack_react_redux_cortex',
     webPathMap: webPathMap,

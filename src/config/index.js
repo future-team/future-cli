@@ -1,13 +1,15 @@
-var reactConf = require('./react')
+var reactDmConf = require('./react-dm')
+var reactReduxConf = require('./react-redux')
 var angularConf = require('./angular')
 var jqueryConf = require('./jquery')
 var moduleConf = require('./module')
 module.exports = {
-    reactConf: reactConf.reactConf,
+    reactDmConf: reactDmConf.reactDmConf,
     angularConf: angularConf.angularConf,
     jqueryConf: jqueryConf.jqueryConf,
     moduleConf: moduleConf.moduleConf,
-    getConf: function(type){
-        return type
+    reactReduxConf: reactReduxConf.reactReduxConf,
+    consts: {
+
     }
 }

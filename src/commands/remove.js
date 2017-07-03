@@ -1,101 +1,40 @@
 "use strict";
-var _ = require('lodash')
-var Utils = require('../utils')
-var path = require('path')
-var fs = require('fs')
-var chalk = require('chalk')
-var inquirer = require('inquirer')
-var gitUser = require('../git-user')()
-var configs = require('../config')
-
-function removeWeb(conf) {
-    _.forEach(conf.webPathMap, function(value, key){
-        // create file path
-        if(key == 'mock'){
-            value.path += '/'+conf.camelName;
-        }
-        var filePath = path.join( conf.BASE_PATH, value.path, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
-        // 在 reduces index.es6 中删除
-        // export  {<>} from "./question-list.es6";
-        if(key == 'reducer'){
-            var exPath = path.join(conf.BASE_PATH, value.path, 'index.es6'),
-                source = Utils.readFile(exPath)||'' + '\n',
-                line	= "",
-                content	= "";
-            for(var i=0;i<source.length;i++) {
-                line = line + source[i];
-                if(source[i]=='\n') {
-                    // test line
-                    var regModule = new RegExp('\./'+conf.name+'\.es6', 'gi');
-                    if(!regModule.test(line)){
-                        content = content + line;
-                    }
-                    line = "";
-                }
-            }
-            Utils.writeFile(exPath, content);
-        }
-        try{
-            Utils.removeFile(filePath)
-            console.log('Remove file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
-        }catch(e) {
-            console.log('Remove file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
-        }
-    });
-}
-
-function removeComponent(conf) {
-    _.forEach(conf.componentPathMap, function(value, key){
-        var filePath = path.join( conf.BASE_PATH, value.path, conf.camelName, (value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'])+'.'+value.extension);
-        try {
-            Utils.removeFile(filePath)
-            console.log('Remove file '+ chalk.blue(path.relative(conf.BASE_PATH, filePath))+ ' done')
-        }catch(e){
-            console.log('Remove file '+ chalk.red(path.relative(conf.BASE_PATH, filePath))+ ' error')
-        }
-    });
-}
+var _ = require('lodash');
+var Utils = require('../utils');
+var path = require('path');
+var fs = require('fs');
+var chalk = require('chalk');
+var inquirer = require('inquirer');
+var reactRedux = require('./remove/webpack_react_redux_cortex');
+var reactDm = require('./remove/webpack_react_dm');
 
 function Remove(inputs){
-    var opts = inputs.opts
-    var template = opts['template']
-    var moduleType = opts['type']
-    var name = opts['name']
-    var targetPath = opts['path']
-    var upperCaseName  = name.split('-').map(function(item){return _.upperFirst(item)}).join('')
-    var camelName = _.camelCase(name)
-    var templateConf = configs[template+'Conf']
-    var  writeConf = _.extend({
-        gitUser: gitUser,
-        name: name,
-        upperName: upperCaseName,
-        camelName: camelName
-    }, templateConf)
-
-    targetPath && (writeConf.BASE_PATH = targetPath)
-
+    var writeConf = Utils.generateConf(inputs);
     // ask confirm
     var prompt = inquirer.prompt([{
         name: 'confirmRemove',
         type: 'confirm',
-        message: chalk.red('Do you confirm to remove '+ chalk.yellow(name + ' '+ moduleType) + ' module ')
-    }])
+        message: chalk.red('Do you confirm to remove '+ chalk.yellow(writeConf.name + ' '+ writeConf.moduleType) + ' module ')
+    }]);
     prompt.then(function (answers) {
         // Use user feedback for... whatever!!
         if(answers.confirmRemove === true){
-            switch (moduleType){
-                case 'web':
-                    removeWeb(writeConf)
+            switch (writeConf.moduleType){
+                case 'react_redux_web':
+                    reactRedux.removeWeb(writeConf);
                     break;
-                case 'component':
-                    removeComponent(writeConf)
+                case 'react_redux_component':
+                    reactRedux.removeComponent(writeConf);
+                    break;
+                case 'react_dm_web':
+                    reactDm.removeWeb(writeConf);
                     break;
                 default:
                     // 参数错误
                     break;
             }
         }
-    })
-    return prompt
+    });
+    return prompt;
 }
 module.exports = Remove;
