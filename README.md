@@ -54,7 +54,7 @@ $ gfs rm --template react-redux --type web --name question
 ### gfs mock
 Add mock files by url path
 ```bash
-$ gfs mock --template react-dm --path /path/to/server/get/data
+$ gfs mock --template react-dm --url /path/to/server/get/data
 ```
 
 ### npm alias

@@ -83,8 +83,8 @@ function goToAdd(conf) {
 function Mock(inputs){
     var writeConf = Utils.generateConf(inputs),
         filePath = '', 
-        type = conf.moduleType, 
-        mockPath = inputs.opts.path;
+        type = writeConf.moduleType, 
+        mockPath = inputs.opts.url;
     if(type === REACT_REDUX_WEB || type === REACT_DM_WEB) {
       filePath = path.join( writeConf.BASE_PATH, writeConf.webPathMap.mock.path, mockPath+'.json');
     }else{

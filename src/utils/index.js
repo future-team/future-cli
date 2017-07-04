@@ -154,6 +154,7 @@ module.exports.generateConf = function generateConf(inputs) {
     var template = opts['template'];
     var type = opts['type'] || 'web';
     var name = opts['name'] || '';
+    var mockUrl = opts['url'] || '';
     // need to compose with template
     // --template react-dm --type web -> REACT_DM_WEB
     var moduleType = (template + '-' + type).split('-').map(function(item){return _.lowerCase(item)}).join('_');
@@ -184,9 +185,10 @@ module.exports.generateConf = function generateConf(inputs) {
         upperName: upperCaseName,
         lowerName: lowerCaseName,
         camelName: camelName,
-        moduleType: moduleType
+        moduleType: moduleType,
+        BASE_PATH: process.cwd() + '/src',
     }, templateConf);
 
-    // targetPath && (writeConf.BASE_PATH = targetPath);
+    targetPath && (writeConf.BASE_PATH = targetPath);
     return writeConf;
 }
