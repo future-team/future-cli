@@ -16,12 +16,12 @@ const testConsoleStdout = require("test-console").stdout;
 const MOCK_PROJECT_DIRECTORY = path.join(process.cwd(), '/test/mockProjectDirectory')
 
 // clear MOCK_PROJECT_DIRECTORY file
-// _.forEach(['actions', 'containers', 'entries', 'html', 'less', 'reducers'], (value)=>{
-//     fs.remove(path.join(MOCK_PROJECT_DIRECTORY, value), (err) => {
-//         if (err) return console.error(err)
-//         //console.log('success!')
-//     })
-// })
+_.forEach(['actions', 'containers', 'entries', 'html', 'less', 'reducers'], (value)=>{
+    fs.remove(path.join(MOCK_PROJECT_DIRECTORY, value), (err) => {
+        if (err) return console.error(err)
+        //console.log('success!')
+    })
+})
 describe('gfs curd', () => {
     beforeEach( () => {
 
@@ -81,7 +81,7 @@ describe('gfs curd', () => {
     })
 
     // add web
-    it('`first add --template react --type web --name gfs-test`: `containers/web/GfsTest.jsx` should exist.', (done) => {
+    it('`first add --template react-dm --type web --name gfs-test`: `containers/web/GfsTest.jsx` should exist.', (done) => {
         const gfs = cli(pkg, ['add', '--template', 'react-dm', '--type', 'web', '--name', 'gfs-test', '--path', MOCK_PROJECT_DIRECTORY])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         let addFiles = []
@@ -98,7 +98,7 @@ describe('gfs curd', () => {
         done()
     })
 
-    it('`repeat add --template react --type web --name gfs-test`: should give a prompt.', (done) => {
+    it('`repeat add --template react-dm --type web --name gfs-test`: should give a prompt.', (done) => {
         const gfs = cli(pkg, ['add', '--template', 'react-dm', '--type', 'web', '--name', 'gfs-test', '--path', MOCK_PROJECT_DIRECTORY])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         let addPrompt = null
@@ -113,7 +113,7 @@ describe('gfs curd', () => {
         })
     })
     // remove
-    it('`rm --template react --type web --name gfs-test`: `containers/web/GfsTest.jsx` should not exist.', (done) => {
+    it('`rm --template react-dm --type web --name gfs-test`: `containers/web/GfsTest.jsx` should not exist.', (done) => {
         const gfs = cli(pkg, ['rm', '--template', 'react-dm', '--type', 'web', '--name', 'gfs-test', '--path', MOCK_PROJECT_DIRECTORY])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         let rmPrompt = null

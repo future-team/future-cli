@@ -15,7 +15,7 @@ const testConsoleStdout = require("test-console").stdout;
 const MOCK_PROJECT_DIRECTORY = path.join(process.cwd(), '/test/mockProjectDirectory')
 
 // clear MOCK_PROJECT_DIRECTORY file
-fs.remove(path.join(process.cwd(), 'src'), (err) => {
+fs.remove(path.join(MOCK_PROJECT_DIRECTORY, 'src'), (err) => {
     if (err) return console.error(err)
     //console.log('success!')
 })
@@ -30,9 +30,9 @@ describe('gfs mock', () => {
         const output = testConsoleStdout.inspectSync(function(){
             filePath = gfsMock(gfsOpts)
         })
-        filePath = path.relative(process.cwd(), filePath)
+        filePath = path.relative(MOCK_PROJECT_DIRECTORY, filePath)
         expect(filePath=='src/view/mocks/path/to/server/get/data.json').not.equal(-1)
-        const isTrue = fs.existsSync(path.join(process.cwd(), 'src/view/mocks/path/to/server/get/data.json'))
+        const isTrue = fs.existsSync(path.join(MOCK_PROJECT_DIRECTORY, 'src/view/mocks/path/to/server/get/data.json'))
         expect(isTrue).to.be.a('boolean')
         expect(isTrue).to.equal(true)
         done()
@@ -59,9 +59,9 @@ describe('gfs mock', () => {
         const output = testConsoleStdout.inspectSync(function(){
             filePath = gfsMock(gfsOpts)
         })
-        filePath = path.relative(process.cwd(), filePath)
+        filePath = path.relative(MOCK_PROJECT_DIRECTORY, filePath)
         expect(filePath=='mocks/path/to/server/get/data.json').not.equal(-1)
-        const isTrue = fs.existsSync(path.join(process.cwd(), 'mocks/path/to/server/get/data.json'))
+        const isTrue = fs.existsSync(path.join(MOCK_PROJECT_DIRECTORY, 'mocks/path/to/server/get/data.json'))
         expect(isTrue).to.be.a('boolean')
         expect(isTrue).to.equal(true)
         done()
