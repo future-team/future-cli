@@ -8,7 +8,7 @@ var chalk = require('chalk');
 module.exports.removeWeb = function removeWeb(conf) {
     var isMultiApp = conf.isMultiApp;
     _.forEach(conf.webPathMap, function(value, key){
-        if(key == 'component'){
+        if(key == 'components'){
             value.path += '/'+conf.camelName;
         }
         let fileName = value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'];
