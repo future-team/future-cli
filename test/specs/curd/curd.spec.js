@@ -27,18 +27,18 @@ describe('gfs curd', () => {
 
     })
 
-    it('preValid: should auto set `--template` to react', (done) => {
+    it('preValid: should auto set `--template` to react-dm', (done) => {
         const gfs = cli(pkg, ['rm', '--type', 'web', '--name', 'question-list'])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         const prop = checkEnv.preValid(gfsOpts,  function(opts){
-            expect(opts.opts.template).to.equal('react')
+            expect(opts.opts.template).to.equal('react-dm')
         })
         prop.ui.rl.emit('line', '');
         done()
     })
 
     it('validCmd: show give tip `--type` not set', (done) => {
-        const gfs = cli(pkg, ['rm', '--template', 'react', '--name', 'gfs-test'])
+        const gfs = cli(pkg, ['rm', '--template', 'react-dm', '--name', 'gfs-test'])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         let isOk = null
         const output = testConsoleStdout.inspectSync(function(){
@@ -50,7 +50,7 @@ describe('gfs curd', () => {
     })
 
     it('validCmd: show give tip `--name` not set', (done) => {
-        const gfs = cli(pkg, ['rm', '--template', 'react', '--type', 'web'])
+        const gfs = cli(pkg, ['rm', '--template', 'react-dm', '--type', 'web'])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         let isOk = null
         const output = testConsoleStdout.inspectSync(function(){
@@ -62,7 +62,7 @@ describe('gfs curd', () => {
     })
 
     it('validCmd: it will be ok `--template`, `--type`, `--name` all set', (done) => {
-        const gfs = cli(pkg, ['rm', '--template', 'react', '--type', 'web', '--name', 'gfs-test'])
+        const gfs = cli(pkg, ['rm', '--template', 'react-dm', '--type', 'web', '--name', 'gfs-test'])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         let isOk = null
         const output = testConsoleStdout.inspectSync(function(){
@@ -81,8 +81,8 @@ describe('gfs curd', () => {
     })
 
     // add web
-    it('`first add --template react --type web --name gfs-test`: `containers/web/GfsTest.jsx` should exist.', (done) => {
-        const gfs = cli(pkg, ['add', '--template', 'react', '--type', 'web', '--name', 'gfs-test', '--path', MOCK_PROJECT_DIRECTORY])
+    it('`first add --template react-dm --type web --name gfs-test`: `containers/web/GfsTest.jsx` should exist.', (done) => {
+        const gfs = cli(pkg, ['add', '--template', 'react-dm', '--type', 'web', '--name', 'gfs-test', '--path', MOCK_PROJECT_DIRECTORY])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         let addFiles = []
         const output = testConsoleStdout.inspectSync(function(){
@@ -98,8 +98,8 @@ describe('gfs curd', () => {
         done()
     })
 
-    it('`repeat add --template react --type web --name gfs-test`: should give a prompt.', (done) => {
-        const gfs = cli(pkg, ['add', '--template', 'react', '--type', 'web', '--name', 'gfs-test', '--path', MOCK_PROJECT_DIRECTORY])
+    it('`repeat add --template react-dm --type web --name gfs-test`: should give a prompt.', (done) => {
+        const gfs = cli(pkg, ['add', '--template', 'react-dm', '--type', 'web', '--name', 'gfs-test', '--path', MOCK_PROJECT_DIRECTORY])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         let addPrompt = null
         const output = testConsoleStdout.inspectSync(function(){
@@ -113,8 +113,8 @@ describe('gfs curd', () => {
         })
     })
     // remove
-    it('`rm --template react --type web --name gfs-test`: `containers/web/GfsTest.jsx` should not exist.', (done) => {
-        const gfs = cli(pkg, ['rm', '--template', 'react', '--type', 'web', '--name', 'gfs-test', '--path', MOCK_PROJECT_DIRECTORY])
+    it('`rm --template react-dm --type web --name gfs-test`: `containers/web/GfsTest.jsx` should not exist.', (done) => {
+        const gfs = cli(pkg, ['rm', '--template', 'react-dm', '--type', 'web', '--name', 'gfs-test', '--path', MOCK_PROJECT_DIRECTORY])
         const gfsOpts = Utils.formatArgs(gfs.flags, gfs.input)
         let rmPrompt = null
         const output = testConsoleStdout.inspectSync(function(){

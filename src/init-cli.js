@@ -20,11 +20,13 @@ function Cli(pkg, argv) {
         '  --template  project template, default is [react]\n'+
         '  --type      module type [web|component]\n'+
         '  --name      module name\n'+
+        '  --url       mock url path\n'+
         'Examples\n'+
         '  $ gfs add --template react-redux --type web --name question-detail\n'+
         '  $ gfs add --template react-redux --type component --name ask\n'+
         '  $ gfs rm --template react-redux --type component --name ask\n'+
-        '  $ gfs rm --template react-redux --type web --name question-detail\n';
+        '  $ gfs rm --template react-redux --type web --name question-detail\n'+
+        '  $ gfs rm --template react-dm --type web --url /path/to/server/get/data\n';
 
     return meow({help: helpStr, pkg: pkg, argv: argv })
 }

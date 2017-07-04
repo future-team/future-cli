@@ -51,6 +51,12 @@ $ gfs rm --template react-redux --type component --name question-detail
 $ gfs rm --template react-redux --type web --name question
 ```
 
+### gfs mock
+Add mock files by url path
+```bash
+$ gfs mock --template react-dm --url /path/to/server/get/data
+```
+
 ### npm alias
 Some aliases for npm script, this dependency your `package.json` script config
 ```bash

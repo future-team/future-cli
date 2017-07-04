@@ -10,7 +10,8 @@ var commandMapToPath = {
     'init': '../src/commands/init',
     'rm': '../src/commands/remove',
     'serve': '../src/commands/serve',
-    'alias': '../src/commands/alias'
+    'alias': '../src/commands/alias',
+    'mock': '../src/commands/mock'
 }
 function Navigate(cli) {
     var router = new Router()
@@ -24,6 +25,7 @@ function Navigate(cli) {
     router.registerRoute('rm', require('../src/commands/remove'));
     router.registerRoute('serve', require('../src/commands/serve'));
     router.registerRoute('alias', require('../src/commands/alias'));
+    router.registerRoute('mock', require('../src/commands/mock'));
 
     // navigate
     try {
