@@ -7,7 +7,7 @@ var chalk = require('chalk');
 
 module.exports.removeWeb = function removeWeb(conf) {
 
-    _.forEach(conf.webPathMap, function(value, key){
+    _.forEach(_.cloneDeep(conf.webPathMap), function(value, key){
         // create file path
         if(key == 'mock'){
             value.path += '/'+conf.camelName;

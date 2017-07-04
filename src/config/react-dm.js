@@ -9,7 +9,7 @@ var webPathMap = {
         'path': 'model',
         'extension': 'es6'
     },
-    'component': {
+    'components': {
         'fileNameType': 'upper',
         'path': 'view/components',
         'extension': 'jsx'

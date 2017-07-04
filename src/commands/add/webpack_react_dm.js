@@ -14,7 +14,7 @@ module.exports.addWeb = function addWeb(conf){
         let template = Utils.getTemplate(conf.templateName, key, value, 'web');
         let complied = _.template(template);
         // have a sub directory
-        if(key == 'component'){
+        if(key == 'components'){
             value.path += '/'+conf.camelName;
         }
         let fileName = value.fileNameType == 'normal' ? conf.name : conf[value.fileNameType+'Name'];
