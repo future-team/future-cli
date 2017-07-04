@@ -59,7 +59,7 @@ var checkEnv = {
             questions = [{
                 name: 'confirmUseDefaultTemplate',
                 type: 'confirm',
-                message: chalk.yellow( cmd+' command --template option is dismiss, it will be use default config [react]')
+                message: chalk.yellow( cmd+' command --template option is dismiss, it will be use default config [react-dm]')
             }];
         }
         if(questions.length){
@@ -67,7 +67,7 @@ var checkEnv = {
             prompt.then(function (answers) {
                 // Use user feedback for... whatever!!
                 if(answers.confirmUseDefaultTemplate === true){
-                    inputs.opts.template = 'react-redux'
+                    inputs.opts.template = 'react-dm'
                     callback && callback(inputs)
                 }
             });
