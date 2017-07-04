@@ -7,7 +7,7 @@ var chalk = require('chalk');
 
 module.exports.removeWeb = function removeWeb(conf) {
     var isMultiApp = conf.isMultiApp;
-    _.forEach(conf.webPathMap, function(value, key){
+    _.forEach(_.cloneDeep(conf.webPathMap), function(value, key){
         if(key == 'components'){
             value.path += '/'+conf.camelName;
         }
